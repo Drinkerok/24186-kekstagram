@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм» [![Build status][travis-image]][travis-url] [![Dependency status][dependency-image]][dependency-url]
 
 * Студент: [Дмитрий Казанцев](https://up.htmlacademy.ru/javascript/4/user/24186).
-* Наставник: `Неизвестно`.
+* Наставник: [Мартин Шульц](https://htmlacademy.ru/profile/id201567).
 
 ---
 
