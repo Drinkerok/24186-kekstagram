@@ -114,15 +114,17 @@
 
       // Рисуем затемнение
       this._ctx.fillStyle = 'rgba(0,0,0,0.8)';
-      // Вертикальный левый прямоугольник
-      this._ctx.fillRect(displX, displY, Math.round((this._container.width / 2) - (this._resizeConstraint.side / 2) - this._ctx.lineWidth), this._container.height);
-      // Вертикальный правый прямоугольник
-      this._ctx.fillRect(Math.round(this._resizeConstraint.side / 2 - this._ctx.lineWidth / 2), displY, Math.round(this._container.width / 2 - this._resizeConstraint.side / 2 + this._ctx.lineWidth / 2), this._container.height);
-      // Горизонтальный верхний прямоугольник
-      this._ctx.fillRect(Math.round(-this._resizeConstraint.side / 2 - this._ctx.lineWidth), displY, Math.round(this._resizeConstraint.side + this._ctx.lineWidth / 2), Math.round(this._container.height / 2 - this._resizeConstraint.side / 2 - this._ctx.lineWidth));
-      // Горизонтальный нижний прямоугольник
-      this._ctx.fillRect(Math.round(-this._resizeConstraint.side / 2 - this._ctx.lineWidth), Math.round(this._resizeConstraint.side / 2 - this._ctx.lineWidth / 2), Math.round(this._resizeConstraint.side + this._ctx.lineWidth / 2), Math.round(this._container.height / 2 - this._resizeConstraint.side / 2 + this._ctx.lineWidth / 2));
+      this._ctx.beginPath();
+      this._ctx.rect(displX, displY, this._container.width, this._container.height);
+      this._ctx.rect(
+        this._resizeConstraint.side / 2 - this._ctx.lineWidth / 2,
+        -this._resizeConstraint.side / 2 - this._ctx.lineWidth,
+        -this._resizeConstraint.side - this._ctx.lineWidth / 2,
+        this._resizeConstraint.side + this._ctx.lineWidth / 2
+      );
+      this._ctx.fill();
 
+      // Рисуем рамку
       this._ctx.fillStyle = '#ffe753';
       function drawFrame(x1, y1, x2, y2, canvas){
         // Проходим поочередно 4 стороны
@@ -164,18 +166,14 @@
         canvas.fill();
         canvas.closePath();
       }
-
       drawFrame(
         (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
         (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
         (this._resizeConstraint.side / 2) - this._ctx.lineWidth,
         (this._resizeConstraint.side / 2) - this._ctx.lineWidth,
         this._ctx);
-      
-      
 
       // Добавляем размер картинки над прямоугольником
-
       this._ctx.font="16px Arial";
       this._ctx.fillStyle = "#ffffff";
       this._ctx.textAlign='center';
