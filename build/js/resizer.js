@@ -123,13 +123,56 @@
       // Горизонтальный нижний прямоугольник
       this._ctx.fillRect(Math.round(-this._resizeConstraint.side / 2 - this._ctx.lineWidth), Math.round(this._resizeConstraint.side / 2 - this._ctx.lineWidth / 2), Math.round(this._resizeConstraint.side + this._ctx.lineWidth / 2), Math.round(this._container.height / 2 - this._resizeConstraint.side / 2 + this._ctx.lineWidth / 2));
 
-      // Отрисовка прямоугольника, обозначающего область изображения после
-      // кадрирования. Координаты задаются от центра.
-      this._ctx.strokeRect(
-          (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
-          (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
-          this._resizeConstraint.side - this._ctx.lineWidth / 2,
-          this._resizeConstraint.side - this._ctx.lineWidth / 2);
+      this._ctx.fillStyle = '#ffe753';
+      function drawFrame(x1, y1, x2, y2, canvas){
+        // Проходим поочередно 4 стороны
+        // Верхняя граница
+        var coord = x1;
+        while (coord < x2){
+          drawArc(coord, y1, canvas.lineWidth/2, canvas);
+          // смещаем координату на полтора круга;
+          coord += canvas.lineWidth * 1.5;
+        }
+
+        // Нижняя граница
+        var coord = x1;
+        while (coord < x2){
+          drawArc(coord, y2, canvas.lineWidth/2, canvas);
+          // смещаем координату на полтора круга;
+          coord += 9;
+        }
+
+        // Левая граница
+        var coord = y1;
+        while (coord < y2){
+          drawArc(x1, coord, canvas.lineWidth/2, canvas);
+          // смещаем координату на полтора круга;
+          coord += 9;
+        }
+
+        // Правая граница граница
+        var coord = y1;
+        while (coord < y2){
+          drawArc(x2, coord, canvas.lineWidth/2, canvas);
+          // смещаем координату на полтора круга;
+          coord += 9;
+        }
+      }
+      function drawArc(x, y, radius, canvas){
+        canvas.beginPath();
+        canvas.arc(x, y, radius, 0 ,2*Math.PI);
+        canvas.fill();
+        canvas.closePath();
+      }
+
+      drawFrame(
+        (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
+        (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
+        (this._resizeConstraint.side / 2) - this._ctx.lineWidth,
+        (this._resizeConstraint.side / 2) - this._ctx.lineWidth,
+        this._ctx);
+      
+      
 
       // Добавляем размер картинки над прямоугольником
 
