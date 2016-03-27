@@ -133,8 +133,9 @@
         var width = 20;
         var height = 10;
         // Войдет ли целое количество зигзагов
-        var width_rest = (-x1 + x2) % width;
-        var zigzag_number = Math.floor( (-x1 + x2) / width );
+        var side = -x1 + x2;
+        var width_rest = side % width;
+        var zigzag_number = Math.floor(side / width);
         // Если есть остаток, увеличиваем ширину
         if (width_rest) width += width_rest / zigzag_number;
 
