@@ -128,36 +128,20 @@
       this._ctx.fillStyle = '#ffe753';
       function drawFrame(x1, y1, x2, y2, canvas){
         // Проходим поочередно 4 стороны
-        // Верхняя граница
-        var coord = x1;
-        while (coord < x2){
-          drawArc(coord, y1, canvas.lineWidth/2, canvas);
-          // смещаем координату на полтора круга;
-          coord += canvas.lineWidth * 1.5;
-        }
-
+        // т.к. у нас квадрат, сделаем за один цикл
+        var position = x1;
+        var position_end = x2;
+        while (position < position_end){
+          //Верхняя граница
+          drawArc(position, y1, canvas.lineWidth/2, canvas);
         // Нижняя граница
-        var coord = x1;
-        while (coord < x2){
-          drawArc(coord, y2, canvas.lineWidth/2, canvas);
-          // смещаем координату на полтора круга;
-          coord += 9;
-        }
-
+          drawArc(position, y2, canvas.lineWidth/2, canvas);
         // Левая граница
-        var coord = y1;
-        while (coord < y2){
-          drawArc(x1, coord, canvas.lineWidth/2, canvas);
-          // смещаем координату на полтора круга;
-          coord += 9;
-        }
-
+          drawArc(x1, position, canvas.lineWidth/2, canvas);
         // Правая граница граница
-        var coord = y1;
-        while (coord < y2){
-          drawArc(x2, coord, canvas.lineWidth/2, canvas);
+          drawArc(x2, position, canvas.lineWidth/2, canvas);
           // смещаем координату на полтора круга;
-          coord += 9;
+          position += canvas.lineWidth * 1.5;
         }
       }
       function drawArc(x, y, radius, canvas){
