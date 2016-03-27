@@ -89,7 +89,7 @@
       // чего-либо с другой обводкой.
 
       // Толщина линии.
-      this._ctx.lineWidth = 6;
+      this._ctx.lineWidth = 3;
       // Цвет обводки.
       this._ctx.strokeStyle = '#ffe753';
       // Размер штрихов. Первый элемент массива задает длину штриха, второй
@@ -125,29 +125,59 @@
       this._ctx.fill();
 
       // Рисуем рамку
+      this._ctx.setLineDash([]);
       this._ctx.fillStyle = '#ffe753';
       function drawFrame(x1, y1, x2, y2, canvas){
-        // Проходим поочередно 4 стороны
-        // т.к. у нас квадрат, сделаем за один цикл
-        var position = x1;
-        var position_end = x2;
-        while (position < position_end){
-          //Верхняя граница
-          drawArc(position, y1, canvas.lineWidth/2, canvas);
-        // Нижняя граница
-          drawArc(position, y2, canvas.lineWidth/2, canvas);
-        // Левая граница
-          drawArc(x1, position, canvas.lineWidth/2, canvas);
-        // Правая граница граница
-          drawArc(x2, position, canvas.lineWidth/2, canvas);
-          // смещаем координату на полтора круга;
-          position += canvas.lineWidth * 1.5;
+        // Нужно смещение, чтобы линия была непрерывной
+        // Ширина и высота одного зигзага
+        var width = 20;
+        var height = 10;
+        // Войдет ли целое количество зигзагов
+        var width_rest = (-x1 + x2) % width;
+        var zigzag_number = Math.floor( (-x1 + x2) / width );
+        // Если есть остаток, увеличиваем ширину
+        if (width_rest) width += width_rest / zigzag_number;
+
+        var coord = x1;
+        
+        for (var i=0; i < zigzag_number; i++){
+          // Верхняя граница
+          drawHorizontalZigzag(coord, y1, canvas, width, height, false);
+          // Нижняя граница
+          drawHorizontalZigzag(coord, y2, canvas, width, height, true);
+          // Левая граница
+          drawVerticalZigzag(x2, coord, canvas, width, height, false);
+          // Правая граница
+          drawVerticalZigzag(x1, coord, canvas, width, height, true);
+          coord += width;
         }
       }
-      function drawArc(x, y, radius, canvas){
+      function drawHorizontalZigzag(x, y, canvas, width, height, invert){
         canvas.beginPath();
-        canvas.arc(x, y, radius, 0 ,2*Math.PI);
-        canvas.fill();
+        if (invert){
+          canvas.moveTo(x,y - height);
+          canvas.lineTo(x + width / 2, y);
+          canvas.lineTo(x + width, y - height);
+        } else {
+          canvas.moveTo(x,y + height);
+          canvas.lineTo(x + width / 2, y);
+          canvas.lineTo(x + width, y + height);
+        }
+        canvas.stroke();
+        canvas.closePath();
+      }
+      function drawVerticalZigzag(x, y, canvas, width, height, invert){
+        canvas.beginPath();
+        if (invert){
+          canvas.moveTo(x + height,y);
+          canvas.lineTo(x, y + width / 2);
+          canvas.lineTo(x + height, y + width);
+        } else {
+          canvas.moveTo(x - height,y);
+          canvas.lineTo(x, y + width / 2);
+          canvas.lineTo(x - height, y + width);
+        }
+        canvas.stroke();
         canvas.closePath();
       }
       drawFrame(
