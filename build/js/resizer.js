@@ -89,7 +89,7 @@
       // чего-либо с другой обводкой.
 
       // Толщина линии.
-      this._ctx.lineWidth = 6;
+      this._ctx.lineWidth = 3;
       // Цвет обводки.
       this._ctx.strokeStyle = '#ffe753';
       // Размер штрихов. Первый элемент массива задает длину штриха, второй
@@ -112,13 +112,87 @@
       // Координаты задаются от центра холста.
       this._ctx.drawImage(this._image, displX, displY);
 
-      // Отрисовка прямоугольника, обозначающего область изображения после
-      // кадрирования. Координаты задаются от центра.
-      this._ctx.strokeRect(
-          (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
-          (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
-          this._resizeConstraint.side - this._ctx.lineWidth / 2,
-          this._resizeConstraint.side - this._ctx.lineWidth / 2);
+      // Рисуем затемнение
+      this._ctx.fillStyle = 'rgba(0,0,0,0.8)';
+      this._ctx.beginPath();
+      this._ctx.rect(displX, displY, this._container.width, this._container.height);
+      this._ctx.rect(
+        this._resizeConstraint.side / 2 - this._ctx.lineWidth / 2,
+        -this._resizeConstraint.side / 2 - this._ctx.lineWidth,
+        -this._resizeConstraint.side - this._ctx.lineWidth / 2,
+        this._resizeConstraint.side + this._ctx.lineWidth / 2
+      );
+      this._ctx.fill();
+
+      // Рисуем рамку
+      this._ctx.setLineDash([]);
+      this._ctx.fillStyle = '#ffe753';
+      function drawFrame(x1, y1, x2, y2, canvas){
+        // Нужно смещение, чтобы линия была непрерывной
+        // Ширина и высота одного зигзага
+        var width = 20;
+        var height = 10;
+        // Войдет ли целое количество зигзагов
+        var side = -x1 + x2;
+        var width_rest = side % width;
+        var zigzag_number = Math.floor(side / width);
+        // Если есть остаток, увеличиваем ширину
+        if (width_rest) width += width_rest / zigzag_number;
+
+        var coord = x1;
+        
+        for (var i=0; i < zigzag_number; i++){
+          // Верхняя граница
+          drawHorizontalZigzag(coord, y1, canvas, width, height, false);
+          // Нижняя граница
+          drawHorizontalZigzag(coord, y2, canvas, width, height, true);
+          // Левая граница
+          drawVerticalZigzag(x2, coord, canvas, width, height, false);
+          // Правая граница
+          drawVerticalZigzag(x1, coord, canvas, width, height, true);
+          coord += width;
+        }
+      }
+      function drawHorizontalZigzag(x, y, canvas, width, height, invert){
+        canvas.beginPath();
+        if (invert){
+          canvas.moveTo(x,y - height);
+          canvas.lineTo(x + width / 2, y);
+          canvas.lineTo(x + width, y - height);
+        } else {
+          canvas.moveTo(x,y + height);
+          canvas.lineTo(x + width / 2, y);
+          canvas.lineTo(x + width, y + height);
+        }
+        canvas.stroke();
+        canvas.closePath();
+      }
+      function drawVerticalZigzag(x, y, canvas, width, height, invert){
+        canvas.beginPath();
+        if (invert){
+          canvas.moveTo(x + height,y);
+          canvas.lineTo(x, y + width / 2);
+          canvas.lineTo(x + height, y + width);
+        } else {
+          canvas.moveTo(x - height,y);
+          canvas.lineTo(x, y + width / 2);
+          canvas.lineTo(x - height, y + width);
+        }
+        canvas.stroke();
+        canvas.closePath();
+      }
+      drawFrame(
+        (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
+        (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
+        (this._resizeConstraint.side / 2) - this._ctx.lineWidth,
+        (this._resizeConstraint.side / 2) - this._ctx.lineWidth,
+        this._ctx);
+
+      // Добавляем размер картинки над прямоугольником
+      this._ctx.font="16px Arial";
+      this._ctx.fillStyle = "#ffffff";
+      this._ctx.textAlign='center';
+      this._ctx.fillText(this._image.naturalWidth + ' x ' + this._image.naturalHeight,0,-this._resizeConstraint.side / 2 - this._ctx.lineWidth - 2);
 
       // Восстановление состояния канваса, которое было до вызова ctx.save
       // и последующего изменения системы координат. Нужно для того, чтобы
