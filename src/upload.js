@@ -67,11 +67,59 @@
     backgroundElement.style.backgroundImage = 'url(' + images[randomImageNumber] + ')';
   }
 
+  // Проверяем, что это число, входит в диапозон
+  function validateInputError(input){
+    var value = input.value;
+    if ( !(!isNaN(parseFloat(value)) && isFinite(value)) ) return 'Тут не число!';
+    if ( +value < +input.min ) return 'Меньше минимального допустимого значения';
+    if ( +value > +input.max ) return 'Больше максимального допустимого значения';
+    return false;
+  }
+  // создаем окошко для вывода ошибки
+  function createErrorBlock(input, text, position){
+    var div = document.createElement('DIV');
+    div.classList.add('error_box');
+    div.classList.add('error_box--' + input.id);
+    div.style.width = input.offsetWidth + 'px';
+    div.style.position = 'absolute';
+    div.style.left = position.left + pageXOffset + 'px';
+    div.innerHTML = text;
+    document.body.appendChild(div);
+    div.style.top = position.top + pageYOffset - div.offsetHeight + 'px';
+  }
+  // убрать все сообщения об ошибках
+  function removeErrorBoxes(class_name){
+    var error_div = document.querySelector('.' + class_name);
+    if (error_div) error_div.parentNode.removeChild(error_div);
+  }
+  // Вывод ошибок
+  function showValidateErrors(input, text){
+    input.classList.add('error');
+    var input_position = input.getBoundingClientRect();
+    var error_box = {};
+    error_box.top = input_position.top - input.offsetHeight;
+    
+    error_box.left = input_position.left;;
+
+    createErrorBlock(input, text, error_box);
+  }
+  // Проверка координата + размер не превышают максимум
+  function checkSumm(form){
+    if ( (+form.resize_x.value + +form.resize_size.value > currentResizer._image.naturalWidth) ||
+         (+form.resize_y.value + +form.resize_size.value > currentResizer._image.naturalHeight) )
+    return false;
+
+    return true;
+  }
   /**
    * Проверяет, валидны ли данные, в форме кадрирования.
    * @return {boolean}
    */
-  function resizeFormIsValid() {
+  function resizeFormIsValid(form) {
+    if (!checkSumm(form)) {
+      showValidateErrors(form.resize_fwd.parentNode, 'Выбранная область выходит за картинку');
+      return false;
+    }
     return true;
   }
 
@@ -120,6 +168,9 @@
         isError = true;
         message = message || 'Неподдерживаемый формат файла<br> <a href="' + document.location + '">Попробовать еще раз</a>.';
         break;
+
+      case Action.FORM_ERROR:
+        break
     }
 
     uploadMessage.querySelector('.upload-message-container').innerHTML = message;
@@ -196,6 +247,7 @@
   resizeForm.resize_x = document.getElementById('resize-x');
   resizeForm.resize_y = document.getElementById('resize-y');
   resizeForm.resize_size = document.getElementById('resize-size');
+  resizeForm.resize_fwd = document.getElementById('resize-fwd');
   function setResizeDefault(resizer, form){
     form.resize_x.value = 0;
     form.resize_y.value = 0;
@@ -210,7 +262,20 @@
     form.resize_y.max = resizer._image.naturalHeight - 1;
     form.resize_size.max = Math.min(resizer._image.naturalWidth, resizer._image.naturalHeight);
 
-    form.resize_x.oninput = form.resize_y.oninput = function(e){
+    // при изменении значений в инпутах, добавляем возможность отправки формы
+    // и убираем класс ошибки
+    // и убираем сообщение об ошибке
+    form.resize_x.oninput = form.resize_y.oninput= form.resize_size.oninput = function(e){
+      form.resize_fwd.disabled = '';
+      this.classList.remove('error');
+      removeErrorBoxes('error_box--' + this.id);
+    }
+    form.resize_x.oninvalid = form.resize_y.oninvalid = form.resize_size.oninvalid = function(e){
+      e.preventDefault();
+      var errors = validateInputError(this);
+      if (errors != false) {
+        showValidateErrors(this, errors);
+      }
     }
   }
 
@@ -222,11 +287,15 @@
   resizeForm.onsubmit = function(evt) {
     evt.preventDefault();
 
-    if (resizeFormIsValid()) {
+    if (resizeFormIsValid(this)) {
       filterImage.src = currentResizer.exportImage().src;
+      // сообщение об ошибке суммы без дополнительного класса :)
+      removeErrorBoxes('error_box--');
 
       resizeForm.classList.add('invisible');
       filterForm.classList.remove('invisible');
+    } else {
+      resizeForm.resize_fwd.disabled = 'disabled';
     }
   };
 
