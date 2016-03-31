@@ -71,7 +71,11 @@
    * Проверяет, валидны ли данные, в форме кадрирования.
    * @return {boolean}
    */
-  function resizeFormIsValid() {
+  function resizeFormIsValid(form) {
+    if ( (+form.resize_x.value + +form.resize_size.value > currentResizer._image.naturalWidth) ||
+         (+form.resize_y.value + +form.resize_size.value > currentResizer._image.naturalHeight) )
+    return false;
+
     return true;
   }
 
@@ -120,6 +124,9 @@
         isError = true;
         message = message || 'Неподдерживаемый формат файла<br> <a href="' + document.location + '">Попробовать еще раз</a>.';
         break;
+
+      case Action.FORM_ERROR:
+        break
     }
 
     uploadMessage.querySelector('.upload-message-container').innerHTML = message;
@@ -196,6 +203,7 @@
   resizeForm.resize_x = document.getElementById('resize-x');
   resizeForm.resize_y = document.getElementById('resize-y');
   resizeForm.resize_size = document.getElementById('resize-size');
+  resizeForm.resize_fwd = document.getElementById('resize-fwd');
   function setResizeDefault(resizer, form){
     form.resize_x.value = 0;
     form.resize_y.value = 0;
@@ -210,7 +218,9 @@
     form.resize_y.max = resizer._image.naturalHeight - 1;
     form.resize_size.max = Math.min(resizer._image.naturalWidth, resizer._image.naturalHeight);
 
-    form.resize_x.oninput = form.resize_y.oninput = function(e){
+    // при изменении значений в инпутах, добавляем возможность отправки формы
+    form.resize_x.oninput = form.resize_y.oninput= form.resize_size.oninput = function(e){
+      form.resize_fwd.disabled = '';
     }
   }
 
@@ -222,11 +232,13 @@
   resizeForm.onsubmit = function(evt) {
     evt.preventDefault();
 
-    if (resizeFormIsValid()) {
+    if (resizeFormIsValid(this)) {
       filterImage.src = currentResizer.exportImage().src;
 
       resizeForm.classList.add('invisible');
       filterForm.classList.remove('invisible');
+    } else {
+      resizeForm.resize_fwd.disabled = 'disabled';
     }
   };
 
