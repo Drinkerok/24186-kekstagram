@@ -8,6 +8,8 @@
 'use strict';
 
 (function() {
+  var browserCookies = require('browser-cookies');
+
   /** @enum {string} */
   var FileType = {
     'GIF': '',
@@ -293,10 +295,17 @@
       removeErrorBoxes('error_box--');
 
       resizeForm.classList.add('invisible');
+      // ставим фильтр
+      setFilter();
       filterForm.classList.remove('invisible');
     } else {
       resizeForm.resize_fwd.disabled = 'disabled';
     }
+  };
+
+  function setFilter(){
+    var filter = browserCookies.get('filter') || 'none';
+    document.getElementById('upload-filter-' + filter).checked = 'checked';
   };
 
   /**
@@ -344,6 +353,19 @@
     var selectedFilter = [].filter.call(filterForm['upload-filter'], function(item) {
       return item.checked;
     })[0].value;
+
+    // сохраняем в куки
+    var now = new Date();
+    var my_birthsday = new Date(0, 8, 6);
+    if (now.getMonth() > my_birthsday.getMonth() && now.getDate() > my_birthsday.getDate()){
+      my_birthsday.setFullYear(now.getFullYear());
+    } else {
+      my_birthsday.setFullYear(now.getFullYear() - 1);
+    }
+    var days_passed = Math.floor (Math.abs(now - my_birthsday) / 1000 / 60 / 60 / 24);
+    browserCookies.set('filter', selectedFilter, {
+      expires: Date.now() + days_passed;
+    });
 
     // Класс перезаписывается, а не обновляется через classList потому что нужно
     // убрать предыдущий примененный класс. Для этого нужно или запоминать его
