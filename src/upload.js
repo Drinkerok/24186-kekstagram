@@ -68,7 +68,7 @@
   }
 
   // Проверяем, что это число, входит в диапозон
-  function validateInputError(input, to_submit){
+  function validateInputError(input){
     var value = input.value;
     if ( !(!isNaN(parseFloat(value)) && isFinite(value)) ) return 'Тут не число!';
     if ( +value < +input.min ) return 'Меньше минимального допустимого значения';
@@ -79,29 +79,25 @@
   function createErrorBlock(input, text, position){
     var div = document.createElement('DIV');
     div.classList.add('error_box');
-    div.style.top = position.top + pageYOffset + 'px';
+    div.classList.add('error_box--' + input.id);
+    div.style.width = input.offsetWidth + 'px';
     div.style.position = 'absolute';
     div.style.left = position.left + pageXOffset + 'px';
     div.innerHTML = text;
     document.body.appendChild(div);
+    div.style.top = position.top + pageYOffset - div.offsetHeight + 'px';
   }
   // убрать все сообщения об ошибках
-  function removeErrorBoxes(){
-    var boxes = document.getElementsByClassName('error_box');
-    while (boxes[0]){
-      document.body.removeChild(boxes[0]);
-    }
+  function removeErrorBoxes(class_name){
+    var error_div = document.querySelector('.' + class_name);
+    if (error_div) error_div.parentNode.removeChild(error_div);
   }
   // Вывод ошибок
-  function showValidateErrors(input, text, under_input){
-    var under = under_input || true;
+  function showValidateErrors(input, text){
+    input.classList.add('error');
     var input_position = input.getBoundingClientRect();
     var error_box = {};
-    if (under_input === true){
-      error_box.top = input_position.top + input.offsetHeight;
-    } else {
-      error_box.top = input_position.top - input.offsetHeight;
-    }
+    error_box.top = input_position.top - input.offsetHeight;
     
     error_box.left = input_position.left;;
 
@@ -120,29 +116,11 @@
    * @return {boolean}
    */
   function resizeFormIsValid(form) {
-    var to_submit = true;
-    var errors = validateInputError(form.resize_x, to_submit);
-    if (errors != false) {
-      showValidateErrors(form.resize_x, errors, false);
-      to_submit = false;
-    }
-    var errors = validateInputError(form.resize_y, to_submit);
-    if (errors != false) {
-      showValidateErrors(form.resize_y, errors, true);
-      to_submit = false;
-    }
-    var errors = validateInputError(form.resize_size, to_submit);
-    if (errors != false) {
-      showValidateErrors(form.resize_size, errors, false);
-      to_submit = false;
-    }
-
     if (!checkSumm(form)) {
-      showValidateErrors(form.resize_fwd.parentNode, 'Выбранная область выходит за картинку', true);
-      to_submit = false;
+      showValidateErrors(form.resize_fwd.parentNode, 'Выбранная область выходит за картинку');
+      return false;
     }
-
-    return to_submit;
+    return true;
   }
 
   /**
@@ -285,11 +263,19 @@
     form.resize_size.max = Math.min(resizer._image.naturalWidth, resizer._image.naturalHeight);
 
     // при изменении значений в инпутах, добавляем возможность отправки формы
+    // и убираем класс ошибки
+    // и убираем сообщение об ошибке
     form.resize_x.oninput = form.resize_y.oninput= form.resize_size.oninput = function(e){
       form.resize_fwd.disabled = '';
+      this.classList.remove('error');
+      removeErrorBoxes('error_box--' + this.id);
     }
     form.resize_x.oninvalid = form.resize_y.oninvalid = form.resize_size.oninvalid = function(e){
       e.preventDefault();
+      var errors = validateInputError(this);
+      if (errors != false) {
+        showValidateErrors(this, errors);
+      }
     }
   }
 
@@ -300,10 +286,11 @@
    */
   resizeForm.onsubmit = function(evt) {
     evt.preventDefault();
-    removeErrorBoxes();
 
     if (resizeFormIsValid(this)) {
       filterImage.src = currentResizer.exportImage().src;
+      // сообщение об ошибке суммы без дополнительного класса :)
+      removeErrorBoxes('error_box--');
 
       resizeForm.classList.add('invisible');
       filterForm.classList.remove('invisible');

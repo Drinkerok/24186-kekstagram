@@ -247,6 +247,9 @@ body {
   border: none;
   border-radius: 2px;
 }
+.upload-resize-controls input.error{
+  outline: 3px solid #f00;
+}
 
 .upload-filter-controls {
   position: absolute;
