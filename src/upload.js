@@ -138,7 +138,7 @@
     }
 
     if (!checkSumm(form)) {
-      showValidateErrors(form.resize_fwd.parentNode, 'Выбранная область выходит за картинку', true)
+      showValidateErrors(form.resize_fwd.parentNode, 'Выбранная область выходит за картинку', true);
       to_submit = false;
     }
 
