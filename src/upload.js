@@ -364,7 +364,7 @@
     }
     var days_passed = Math.floor (Math.abs(now - my_birthsday) / 1000 / 60 / 60 / 24);
     browserCookies.set('filter', selectedFilter, {
-      expires: Date.now() + days_passed;
+      expires: Date.now() + days_passed
     });
 
     // Класс перезаписывается, а не обновляется через classList потому что нужно
