@@ -90,6 +90,13 @@
     div.style.top = position.top + pageYOffset - div.offsetHeight + 'px';
   }
   // убрать все сообщения об ошибках
+  function removeAllErrorBoxes(){
+    var error_divs = document.getElementsByClassName('error_box');
+    while (error_divs[0]){
+      error_divs[0].parentNode.removeChild(error_divs[0]);
+    }
+  }
+  // убрать сообщение об ошибках
   function removeErrorBoxes(class_name){
     var error_div = document.querySelector('.' + class_name);
     if (error_div) error_div.parentNode.removeChild(error_div);
@@ -238,6 +245,13 @@
 
     cleanupResizer();
     updateBackground();
+
+    // Если были ошибки, убираем их :)
+    this.resize_fwd.disabled = '';
+    removeAllErrorBoxes();
+    this.resize_x.classList.remove('error');
+    this.resize_y.classList.remove('error');
+    this.resize_size.classList.remove('error');
 
     resizeForm.classList.add('invisible');
     uploadForm.classList.remove('invisible');
