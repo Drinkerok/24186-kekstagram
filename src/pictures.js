@@ -29,7 +29,7 @@ function createPicture(data){
   }
   picture_image.src = data.url;
 
-  pictureLoadTimeout = setTimeout(function() {
+  var pictureLoadTimeout = setTimeout(function() {
     picture_image.src = '';
     picture.classList.add('picture-load-failure');
   }, 10000);
