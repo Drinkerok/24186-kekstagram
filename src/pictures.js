@@ -21,18 +21,17 @@ function createPicture(data){
   picture_image.onload = function(){
     clearTimeout(pictureLoadTimeout);
     img.src = picture_image.src;
-    block_pictures.appendChild(picture);
   }
   picture_image.onerror = function(){
     picture.classList.add('picture-load-failure');
-    block_pictures.appendChild(picture);
   }
   picture_image.src = data.url;
 
   var pictureLoadTimeout = setTimeout(function() {
-    picture_image.src = '';
     picture.classList.add('picture-load-failure');
   }, 10000);
+
+  block_pictures.appendChild(picture);
 }
 
 window.pictures.forEach(function(picture){
