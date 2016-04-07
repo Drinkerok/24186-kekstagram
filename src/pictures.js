@@ -52,7 +52,7 @@ function sortPictures(arr, sorting){
       break;
     case 'filter-discussed':
       sorted_pictures.sort(function(a,b){
-        return b.likes - a.likes;
+        return b.comments - a.comments;
       });
       break;
   }
