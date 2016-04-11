@@ -2,8 +2,17 @@ var template = document.getElementById('picture-template');
 var template_picture;
 var block_pictures = document.querySelector('.pictures');
 var block_filters = document.querySelector('.filters');
-var filters = document.querySelectorAll('.filters-item');
 var pictures;
+var pictures_settings ={
+  "container_break_point" : 1380, // контейнер 980px и 1380px
+  "container" : 0,                // фактическая ширина контейнера
+  "page" : 0,                     // номер страницы
+  "page_max" : 0,                 // максимальное кол-во страниц
+  "per_page" : 0,                 // кол-во фотографий странице
+  "first_page" : 0,               // кол-во фотографий на первой странице
+  "offset" : 0                    // разница между первой и последующими страницами
+}
+var sorted_pictures;
 var active_filter = 'filter-popular';
 
 block_filters.classList.add('hidden');
@@ -14,6 +23,21 @@ if ('content' in template){
   template_picture = template.querySelector('.picture');
 }
 
+// параметры картинок
+function setPicturesParameters(){
+  pictures_settings.container = parseInt(getComputedStyle(block_pictures).width)
+  if (pictures_settings.container < pictures_settings.container_break_point){
+    pictures_settings.per_page = 10;
+    pictures_settings.first_page = 11;
+  } else {
+    pictures_settings.per_page = 14;
+    pictures_settings.first_page = 19;
+  }
+  pictures_settings.page_max = (pictures.length <= pictures_settings.first_page) ? 0
+                                : (Math.ceil(pictures.length / pictures_settings.per_page) - 1);
+  pictures_settings.offset = pictures_settings.first_page -pictures_settings.per_page;
+  pictures_settings.page = 0;
+}
 // создаем блок picture по шаблону
 function createPicture(data){
   var picture = template_picture.cloneNode(true);
@@ -38,7 +62,15 @@ function createPicture(data){
 
   block_pictures.appendChild(picture);
 }
-
+// отрисовка "страницы" картинок
+function createPicturesPage(pictures){
+  var from = (pictures_settings.page === 0) ? 0 : pictures_settings.page * pictures_settings.per_page + pictures_settings.offset;
+  var to = (pictures_settings.page === 0) ? from + pictures_settings.first_page : from + pictures_settings.per_page;
+  pictures.slice(from, to).forEach(function(picture){
+    createPicture(picture);
+  });
+  pictures_settings.page++;
+}
 // сортировка картинок
 function sortPictures(arr, sorting){
   var sorted_pictures = arr.slice();
@@ -66,10 +98,16 @@ xhr.open('GET', 'http://o0.github.io/assets/json/pictures.json');
 // как получили, выводим их. И открываем фильтры
 xhr.onload = function(){
   pictures = JSON.parse(this.response);
-  pictures.forEach(function(picture){
-    createPicture(picture);
-  });
+  sorted_pictures = pictures;
+  setPicturesParameters();
+  createPicturesPage(sorted_pictures);
+  // Если при загрузке первой партии картинок, конец блока виден,
+  // подгружаем еще картинки
+  while (isBottomReached() && (pictures_settings.page <= pictures_settings.page_max)){
+    createPicturesPage(sorted_pictures);
+  }
   block_filters.classList.remove('hidden');
+  enable_scroll();
 }
 
 xhr.timeout = 10000;
@@ -80,20 +118,54 @@ xhr.onerror = xhr.ontimeout = function(){
 xhr.send();
 
 // обработчик на клик по фильтру
-for (var i=0; i<filters.length; i++){
-  filters[i].onclick = function(){
-    var filter_name = this.getAttribute('for');
+block_filters.addEventListener('click', function(e){
+  if (e.target.classList.contains('filters-item')){
+    var label = e.target;
+    var filter_name = label.getAttribute('for');
     // если выбран активный фильтр, то ничего не делать
     if (filter_name !== active_filter){
       active_filter = filter_name;
       // сортируем
-      var sorted_pictures = sortPictures(pictures, filter_name);
+      sorted_pictures = sortPictures(pictures, filter_name);
       // удаляем старые картинки
       block_pictures.innerHTML = '';
+      // начинаем с первой картинки
+      pictures_settings.page = 0;
       // выводим картинки
-      sorted_pictures.forEach(function(picture){
-        createPicture(picture);
-      });
+      createPicturesPage(sorted_pictures);
     }
   }
+})
+
+
+
+// Виден ли конец блока с картинками
+function isBottomReached(){
+  var block_coords = block_pictures.getBoundingClientRect();
+  return (Math.floor(block_coords.bottom) <= window.innerHeight) ? true : false;
 }
+
+// добавление фотографий при скролле
+var enable_scroll = function(){
+  var scrollTimeout;
+  window.addEventListener('scroll', function(){
+    clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(function(){
+      if (isBottomReached() && (pictures_settings.page <= pictures_settings.page_max)){
+        createPicturesPage(sorted_pictures);
+      }
+    }, 100);
+    
+  });
+}
+
+window.addEventListener('resize', function(e){
+  if (getComputedStyle(block_pictures).width != pictures_settings.container){
+    setPicturesParameters();
+    block_pictures.innerHTML = '';
+    createPicturesPage(sorted_pictures);
+    while (isBottomReached() && (pictures_settings.page <= pictures_settings.page_max)){
+      createPicturesPage(sorted_pictures);
+    }
+  }
+});
