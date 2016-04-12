@@ -1,4 +1,8 @@
 'use strict';
+var PICTURES_980_PER_PAGE = 10;
+var PICTURES_980_FIRST_PAGE = 11;
+var PICTURES_1380_PER_PAGE = 14;
+var PICTURES_1380_FIRST_PAGE = 19;
 var template = document.getElementById('picture-template');
 var template_picture;
 var block_pictures = document.querySelector('.pictures');
@@ -28,11 +32,11 @@ if ('content' in template) {
 function setPicturesParameters() {
   pictures_settings.container = parseInt(getComputedStyle(block_pictures).width);
   if (pictures_settings.container < pictures_settings.container_break_point) {
-    pictures_settings.per_page = 10;
-    pictures_settings.first_page = 11;
+    pictures_settings.per_page = PICTURES_980_PER_PAGE;
+    pictures_settings.first_page = PICTURES_980_FIRST_PAGE;
   } else {
-    pictures_settings.per_page = 14;
-    pictures_settings.first_page = 19;
+    pictures_settings.per_page = PICTURES_1380_PER_PAGE;
+    pictures_settings.first_page = PICTURES_1380_FIRST_PAGE;
   }
   pictures_settings.page_max = (pictures.length <= pictures_settings.first_page) ? 0
                                 : (Math.ceil(pictures.length / pictures_settings.per_page) - 1);
