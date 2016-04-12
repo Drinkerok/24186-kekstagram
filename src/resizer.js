@@ -127,7 +127,7 @@
       // Рисуем рамку
       this._ctx.setLineDash([]);
       this._ctx.fillStyle = '#ffe753';
-      function drawFrame(x1, y1, x2, y2, canvas){
+      function drawFrame(x1, y1, x2, y2, canvas) {
         // Нужно смещение, чтобы линия была непрерывной
         // Ширина и высота одного зигзага
         var width = 20;
@@ -137,11 +137,10 @@
         var width_rest = side % width;
         var zigzag_number = Math.floor(side / width);
         // Если есть остаток, увеличиваем ширину
-        if (width_rest) width += width_rest / zigzag_number;
+        if (width_rest) {width += width_rest / zigzag_number};
 
         var coord = x1;
-        
-        for (var i=0; i < zigzag_number; i++){
+        for (var i=0; i<zigzag_number; i++) {
           // Верхняя граница
           drawHorizontalZigzag(coord, y1, canvas, width, height, false);
           // Нижняя граница
@@ -156,25 +155,25 @@
       function drawHorizontalZigzag(x, y, canvas, width, height, invert){
         canvas.beginPath();
         if (invert){
-          canvas.moveTo(x,y - height);
+          canvas.moveTo(x, y - height);
           canvas.lineTo(x + width / 2, y);
           canvas.lineTo(x + width, y - height);
         } else {
-          canvas.moveTo(x,y + height);
+          canvas.moveTo(x, y + height);
           canvas.lineTo(x + width / 2, y);
           canvas.lineTo(x + width, y + height);
         }
         canvas.stroke();
         canvas.closePath();
       }
-      function drawVerticalZigzag(x, y, canvas, width, height, invert){
+      function drawVerticalZigzag(x, y, canvas, width, height, invert) {
         canvas.beginPath();
-        if (invert){
-          canvas.moveTo(x + height,y);
+        if (invert) {
+          canvas.moveTo(x + height, y);
           canvas.lineTo(x, y + width / 2);
           canvas.lineTo(x + height, y + width);
         } else {
-          canvas.moveTo(x - height,y);
+          canvas.moveTo(x - height, y);
           canvas.lineTo(x, y + width / 2);
           canvas.lineTo(x - height, y + width);
         }
@@ -189,10 +188,10 @@
         this._ctx);
 
       // Добавляем размер картинки над прямоугольником
-      this._ctx.font="16px Arial";
-      this._ctx.fillStyle = "#ffffff";
-      this._ctx.textAlign='center';
-      this._ctx.fillText(this._image.naturalWidth + ' x ' + this._image.naturalHeight,0,-this._resizeConstraint.side / 2 - this._ctx.lineWidth - 2);
+      this._ctx.font = '16px Arial';
+      this._ctx.fillStyle = '#ffffff';
+      this._ctx.textAlign = 'center';
+      this._ctx.fillText(this._image.naturalWidth + ' x ' + this._image.naturalHeight, 0, -this._resizeConstraint.side / 2 - this._ctx.lineWidth - 2);
 
       // Восстановление состояния канваса, которое было до вызова ctx.save
       // и последующего изменения системы координат. Нужно для того, чтобы

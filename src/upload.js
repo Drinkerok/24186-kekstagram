@@ -70,15 +70,15 @@
   }
 
   // Проверяем, что это число, входит в диапозон
-  function validateInputError(input){
+  function validateInputError(input) {
     var value = input.value;
-    if ( !(!isNaN(parseFloat(value)) && isFinite(value)) ) return 'Тут не число!';
-    if ( +value < +input.min ) return 'Меньше минимального допустимого значения';
-    if ( +value > +input.max ) return 'Больше максимального допустимого значения';
+    if ( !(!isNaN(parseFloat(value)) && isFinite(value)) ) {return 'Тут не число!'};
+    if ( +value < +input.min ) {return 'Меньше минимального допустимого значения'};
+    if ( +value > +input.max ) {return 'Больше максимального допустимого значения'};
     return false;
   }
   // создаем окошко для вывода ошибки
-  function createErrorBlock(input, text, position){
+  function createErrorBlock(input, text, position) {
     var div = document.createElement('DIV');
     div.classList.add('error_box');
     div.classList.add('error_box--' + input.id);
@@ -90,33 +90,32 @@
     div.style.top = position.top + pageYOffset - div.offsetHeight + 'px';
   }
   // убрать все сообщения об ошибках
-  function removeAllErrorBoxes(){
+  function removeAllErrorBoxes() {
     var error_divs = document.getElementsByClassName('error_box');
-    while (error_divs[0]){
+    while (error_divs[0]) {
       error_divs[0].parentNode.removeChild(error_divs[0]);
     }
   }
   // убрать сообщение об ошибках
-  function removeErrorBoxes(class_name){
+  function removeErrorBoxes(class_name) {
     var error_div = document.querySelector('.' + class_name);
-    if (error_div) error_div.parentNode.removeChild(error_div);
+    if (error_div) {error_div.parentNode.removeChild(error_div)};
   }
   // Вывод ошибок
-  function showValidateErrors(input, text){
+  function showValidateErrors(input, text) {
     input.classList.add('error');
     var input_position = input.getBoundingClientRect();
     var error_box = {};
     error_box.top = input_position.top - input.offsetHeight;
-    
-    error_box.left = input_position.left;;
+    error_box.left = input_position.left;
 
     createErrorBlock(input, text, error_box);
   }
   // Проверка координата + размер не превышают максимум
-  function checkSumm(form){
+  function checkSumm(form) {
     if ( (+form.resize_x.value + +form.resize_size.value > currentResizer._image.naturalWidth) ||
          (+form.resize_y.value + +form.resize_size.value > currentResizer._image.naturalHeight) )
-    return false;
+      {return false};
 
     return true;
   }
@@ -179,7 +178,7 @@
         break;
 
       case Action.FORM_ERROR:
-        break
+        break;
     }
 
     uploadMessage.querySelector('.upload-message-container').innerHTML = message;
@@ -217,7 +216,6 @@
           uploadMessage.classList.add('invisible');
 
           uploadForm.classList.add('invisible');
-          
           setResizeDefault(currentResizer, resizeForm);
           setRequirements(currentResizer, resizeForm);
           resizeForm.classList.remove('invisible');
@@ -264,12 +262,12 @@
   resizeForm.resize_y = document.getElementById('resize-y');
   resizeForm.resize_size = document.getElementById('resize-size');
   resizeForm.resize_fwd = document.getElementById('resize-fwd');
-  function setResizeDefault(resizer, form){
+  function setResizeDefault(resizer, form) {
     form.resize_x.value = 0;
     form.resize_y.value = 0;
     form.resize_size.value = Math.min(resizer._image.naturalWidth, resizer._image.naturalHeight);
   }
-  function setRequirements(resizer, form){
+  function setRequirements(resizer, form) {
     form.resize_x.min = 0;
     form.resize_y.min = 0;
     form.resize_size.min = 1;
@@ -281,11 +279,11 @@
     // при изменении значений в инпутах, добавляем возможность отправки формы
     // и убираем класс ошибки
     // и убираем сообщение об ошибке
-    function oninputResizeForm(){
+    function oninputResizeForm() {
       form.resize_fwd.disabled = '';
       this.classList.remove('error');
       removeErrorBoxes('error_box--' + this.id);
-    }
+    };
     form.resize_x.addEventListener('input', oninputResizeForm);
     form.resize_y.addEventListener('input', oninputResizeForm);
     form.resize_size.addEventListener('input', oninputResizeForm);
@@ -304,7 +302,7 @@
     function oninvalidResizeForm(e){
       e.preventDefault();
       var errors = validateInputError(this);
-      if (errors != false) {
+      if (errors !== false) {
         showValidateErrors(this, errors);
       }
     }
@@ -318,7 +316,7 @@
    * кропнутое изображение в форму добавления фильтра и показывает ее.
    * @param {Event} evt
    */
-  resizeForm.addEventListener('submit', function(evt){
+  resizeForm.addEventListener('submit', function(evt) {
     evt.preventDefault();
 
     if (resizeFormIsValid(this)) {
@@ -409,7 +407,7 @@
   cleanupResizer();
   updateBackground();
 
-  function sincResizerAndForm(){
+  function sincResizerAndForm() {
     resizeForm.resize_x.value = currentResizer.getConstraint().x;
     resizeForm.resize_y.value = currentResizer.getConstraint().y;
     resizeForm.resize_size.value = currentResizer.getConstraint().side;
