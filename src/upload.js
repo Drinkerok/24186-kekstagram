@@ -73,13 +73,13 @@
   function validateInputError(input) {
     var value = input.value;
     if ( !(!isNaN(parseFloat(value)) && isFinite(value)) ) {
-      return 'Тут не число!'
+      return 'Тут не число!';
     }
     if ( +value < +input.min ) {
-      return 'Меньше минимального допустимого значения'
+      return 'Меньше минимального допустимого значения';
     }
     if ( +value > +input.max ) {
-      return 'Больше максимального допустимого значения'
+      return 'Больше максимального допустимого значения';
     }
     return false;
   }
@@ -106,7 +106,7 @@
   function removeErrorBoxes(class_name) {
     var error_div = document.querySelector('.' + class_name);
     if (error_div) {
-      error_div.parentNode.removeChild(error_div)
+      error_div.parentNode.removeChild(error_div);
     }
   }
   // Вывод ошибок
@@ -123,8 +123,8 @@
   function checkSumm(form) {
     if ( (+form.resize_x.value + +form.resize_size.value > currentResizer._image.naturalWidth) ||
          (+form.resize_y.value + +form.resize_size.value > currentResizer._image.naturalHeight) ) {
-      return false
-  }
+      return false;
+    }
 
     return true;
   }
@@ -292,7 +292,7 @@
       form.resize_fwd.disabled = '';
       this.classList.remove('error');
       removeErrorBoxes('error_box--' + this.id);
-    };
+    }
     form.resize_x.addEventListener('input', oninputResizeForm);
     form.resize_y.addEventListener('input', oninputResizeForm);
     form.resize_size.addEventListener('input', oninputResizeForm);
@@ -345,13 +345,13 @@
   function setFilter(){
     var filter = browserCookies.get('filter') || 'none';
     document.getElementById('upload-filter-' + filter).checked = 'checked';
-  };
+  }
 
   /**
    * Сброс формы фильтра. Показывает форму кадрирования.
    * @param {Event} evt
    */
-  filterForm.addEventListener('reset', function(evt){
+  filterForm.addEventListener('reset', function(evt) {
 
     evt.preventDefault();
 
@@ -364,7 +364,7 @@
    * записав сохраненный фильтр в cookie.
    * @param {Event} evt
    */
-  filterForm.addEventListener('submit', function(evt){
+  filterForm.addEventListener('submit', function(evt) {
     evt.preventDefault();
 
     cleanupResizer();
@@ -378,7 +378,7 @@
    * Обработчик изменения фильтра. Добавляет класс из filterMap соответствующий
    * выбранному значению в форме.
    */
-  filterForm.addEventListener('change', function(){
+  filterForm.addEventListener('change', function() {
     if (!filterMap) {
       // Ленивая инициализация. Объект не создается до тех пор, пока
       // не понадобится прочитать его в первый раз, а после этого запоминается
@@ -397,12 +397,12 @@
     // сохраняем в куки
     var now = new Date();
     var my_birthsday = new Date(0, 8, 6);
-    if (now.getMonth() > my_birthsday.getMonth() && now.getDate() > my_birthsday.getDate()){
+    if (now.getMonth() > my_birthsday.getMonth() && now.getDate() > my_birthsday.getDate()) {
       my_birthsday.setFullYear(now.getFullYear());
     } else {
       my_birthsday.setFullYear(now.getFullYear() - 1);
     }
-    var days_passed = Math.floor (Math.abs(now - my_birthsday) / 1000 / 60 / 60 / 24);
+    var days_passed = Math.floor(Math.abs(now - my_birthsday) / 1000 / 60 / 60 / 24);
     browserCookies.set('filter', selectedFilter, {
       expires: Date.now() + days_passed
     });
@@ -421,7 +421,7 @@
     resizeForm.resize_y.value = currentResizer.getConstraint().y;
     resizeForm.resize_size.value = currentResizer.getConstraint().side;
   }
-  window.addEventListener('resizerchange', function(){
+  window.addEventListener('resizerchange', function() {
     sincResizerAndForm();
   });
 })();

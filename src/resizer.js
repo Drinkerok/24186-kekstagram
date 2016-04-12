@@ -138,7 +138,7 @@
         var zigzag_number = Math.floor(side / width);
         // Если есть остаток, увеличиваем ширину
         if (width_rest) {
-          width += width_rest / zigzag_number
+          width += width_rest / zigzag_number;
         }
 
         var coord = x1;
