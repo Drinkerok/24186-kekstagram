@@ -207,7 +207,7 @@
    * и показывается форма кадрирования.
    * @param {Event} evt
    */
-  uploadForm.addEventListener('change', function(evt){
+  uploadForm.addEventListener('change', function(evt) {
     var element = evt.target;
     if (element.id === 'upload-file') {
       // Проверка типа загружаемого файла, тип должен быть изображением
@@ -247,7 +247,7 @@
    * и обновляет фон.
    * @param {Event} evt
    */
-  resizeForm.addEventListener('reset', function(evt){
+  resizeForm.addEventListener('reset', function(evt) {
     evt.preventDefault();
 
     cleanupResizer();
@@ -297,18 +297,18 @@
     form.resize_y.addEventListener('input', oninputResizeForm);
     form.resize_size.addEventListener('input', oninputResizeForm);
 
-    form.resize_x.addEventListener('input', function(){
+    form.resize_x.addEventListener('input', function() {
       currentResizer.setConstraint(+this.value);
     });
-    form.resize_y.addEventListener('input', function(){
+    form.resize_y.addEventListener('input', function() {
       currentResizer.setConstraint(undefined, +this.value);
     });
-    form.resize_size.addEventListener('input', function(){
+    form.resize_size.addEventListener('input', function() {
       currentResizer.setConstraint(undefined, undefined, +this.value);
     });
 
 
-    function oninvalidResizeForm(e){
+    function oninvalidResizeForm(e) {
       e.preventDefault();
       var errors = validateInputError(this);
       if (errors !== false) {
@@ -342,7 +342,7 @@
     }
   });
 
-  function setFilter(){
+  function setFilter() {
     var filter = browserCookies.get('filter') || 'none';
     document.getElementById('upload-filter-' + filter).checked = 'checked';
   }
