@@ -76,6 +76,12 @@ function createPicturesPage(pictures) {
   });
   pictures_settings.page++;
 }
+// заполнить блок картинками
+function fillPicturesBlock(pictures){
+  while (isBottomReached() && (pictures_settings.page <= pictures_settings.page_max)) {
+    createPicturesPage(pictures);
+  }
+}
 // сортировка картинок
 function sortPictures(arr, sorting) {
   var sorted_pictures = arr.slice();
@@ -108,9 +114,7 @@ xhr.onload = function() {
   createPicturesPage(sorted_pictures);
   // Если при загрузке первой партии картинок, конец блока виден,
   // подгружаем еще картинки
-  while (isBottomReached() && (pictures_settings.page <= pictures_settings.page_max)) {
-    createPicturesPage(sorted_pictures);
-  }
+  fillPicturesBlock(sorted_pictures);
   block_filters.classList.remove('hidden');
   enable_scroll();
 };
@@ -168,8 +172,6 @@ window.addEventListener('resize', function() {
     setPicturesParameters();
     block_pictures.innerHTML = '';
     createPicturesPage(sorted_pictures);
-    while (isBottomReached() && (pictures_settings.page <= pictures_settings.page_max)) {
-      createPicturesPage(sorted_pictures);
-    }
+    fillPicturesBlock(sorted_pictures);
   }
 });
