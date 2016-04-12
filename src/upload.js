@@ -72,9 +72,15 @@
   // Проверяем, что это число, входит в диапозон
   function validateInputError(input) {
     var value = input.value;
-    if ( !(!isNaN(parseFloat(value)) && isFinite(value)) ) {return 'Тут не число!'};
-    if ( +value < +input.min ) {return 'Меньше минимального допустимого значения'};
-    if ( +value > +input.max ) {return 'Больше максимального допустимого значения'};
+    if ( !(!isNaN(parseFloat(value)) && isFinite(value)) ) {
+      return 'Тут не число!'
+    }
+    if ( +value < +input.min ) {
+      return 'Меньше минимального допустимого значения'
+    }
+    if ( +value > +input.max ) {
+      return 'Больше максимального допустимого значения'
+    }
     return false;
   }
   // создаем окошко для вывода ошибки
@@ -99,7 +105,9 @@
   // убрать сообщение об ошибках
   function removeErrorBoxes(class_name) {
     var error_div = document.querySelector('.' + class_name);
-    if (error_div) {error_div.parentNode.removeChild(error_div)};
+    if (error_div) {
+      error_div.parentNode.removeChild(error_div)
+    }
   }
   // Вывод ошибок
   function showValidateErrors(input, text) {
@@ -114,8 +122,9 @@
   // Проверка координата + размер не превышают максимум
   function checkSumm(form) {
     if ( (+form.resize_x.value + +form.resize_size.value > currentResizer._image.naturalWidth) ||
-         (+form.resize_y.value + +form.resize_size.value > currentResizer._image.naturalHeight) )
-      {return false};
+         (+form.resize_y.value + +form.resize_size.value > currentResizer._image.naturalHeight) ) {
+      return false
+  }
 
     return true;
   }

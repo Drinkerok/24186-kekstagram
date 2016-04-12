@@ -134,14 +134,14 @@ block_filters.addEventListener('click', function(e) {
       pictures_settings.page = 0;
       // выводим картинки
       createPicturesPage(sorted_pictures);
-    };
-  };
+    }
+  }
 });
 
 
 
 // Виден ли конец блока с картинками
-function isBottomReached(){
+function isBottomReached() {
   var block_coords = block_pictures.getBoundingClientRect();
   return (Math.floor(block_coords.bottom) <= window.innerHeight) ? true : false;
 }

@@ -137,10 +137,12 @@
         var width_rest = side % width;
         var zigzag_number = Math.floor(side / width);
         // Если есть остаток, увеличиваем ширину
-        if (width_rest) {width += width_rest / zigzag_number};
+        if (width_rest) {
+          width += width_rest / zigzag_number
+        }
 
         var coord = x1;
-        for (var i=0; i<zigzag_number; i++) {
+        for (var i = 0; i < zigzag_number; i++) {
           // Верхняя граница
           drawHorizontalZigzag(coord, y1, canvas, width, height, false);
           // Нижняя граница
@@ -152,9 +154,9 @@
           coord += width;
         }
       }
-      function drawHorizontalZigzag(x, y, canvas, width, height, invert){
+      function drawHorizontalZigzag(x, y, canvas, width, height, invert) {
         canvas.beginPath();
-        if (invert){
+        if (invert) {
           canvas.moveTo(x, y - height);
           canvas.lineTo(x + width / 2, y);
           canvas.lineTo(x + width, y - height);
