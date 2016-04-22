@@ -3,6 +3,7 @@ var load = require('./load');
 var settings = require('./parameters');
 var createPage = require('./create_page');
 var filter = require('./filter');
+require('./gallery');
 
 
 
