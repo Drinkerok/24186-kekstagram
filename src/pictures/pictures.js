@@ -1,7 +1,6 @@
 'use strict';
 var load = require('./load');
 var settings = require('./parameters');
-var createImg = require('./create_img');
 var createPage = require('./create_page');
 var filter = require('./filter');
 
