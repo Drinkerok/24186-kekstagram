@@ -5,11 +5,11 @@ var PICTURES_980_FIRST_PAGE = 11;
 var PICTURES_1380_PER_PAGE = 14;
 var PICTURES_1380_FIRST_PAGE = 19;
 
-var block_pictures = document.querySelector('.pictures');
-var block_filters = document.querySelector('.filters');
+var picturesBlock = document.querySelector('.pictures');
+var filtersBlock = document.querySelector('.filters');
 
 module.exports = {
-  pictures_settings : {
+  pictures_settings: {
     'container_break_point': 1380, // контейнер 980px и 1380px
     'container': 0,                // фактическая ширина контейнера
     'page': 0,                     // номер страницы
@@ -18,11 +18,10 @@ module.exports = {
     'first_page': 0,               // кол-во фотографий на первой странице
     'offset': 0                    // разница между первой и последующими страницами
   },
-  blockPictures: block_pictures,
-  blockFilters: block_filters,
-  setParameters : function(pictures) {
-    var block_pictures = this.blockPictures;
-    this.pictures_settings.container = parseInt(getComputedStyle(block_pictures).width);
+  blockPictures: picturesBlock,
+  blockFilters: filtersBlock,
+  setParameters: function(pictures) {
+    this.pictures_settings.container = parseInt(getComputedStyle(this.blockPictures).width, 10);
     if (this.pictures_settings.container < this.pictures_settings.container_break_point) {
       this.pictures_settings.per_page = PICTURES_980_PER_PAGE;
       this.pictures_settings.first_page = PICTURES_980_FIRST_PAGE;
@@ -40,4 +39,4 @@ module.exports = {
     this.sortedPictures = pictures;
     this.renderedPictures = [];
   }
-}
+};

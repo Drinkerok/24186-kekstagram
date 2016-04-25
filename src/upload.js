@@ -104,20 +104,20 @@
   }
   // убрать сообщение об ошибках
   function removeErrorBoxes(className) {
-    var error_div = document.querySelector('.' + className);
-    if (error_div) {
-      error_div.parentNode.removeChild(error_div);
+    var errorDiv = document.querySelector('.' + className);
+    if (errorDiv) {
+      errorDiv.parentNode.removeChild(errorDiv);
     }
   }
   // Вывод ошибок
   function showValidateErrors(input, text) {
     input.classList.add('error');
     var inputPosition = input.getBoundingClientRect();
-    var error_box = {};
-    error_box.top = inputPosition.top - input.offsetHeight;
-    error_box.left = inputPosition.left;
+    var errorBox = {};
+    errorBox.top = inputPosition.top - input.offsetHeight;
+    errorBox.left = inputPosition.left;
 
-    createErrorBlock(input, text, error_box);
+    createErrorBlock(input, text, errorBox);
   }
   // Проверка координата + размер не превышают максимум
   function checkSumm(form) {

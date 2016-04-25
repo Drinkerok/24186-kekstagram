@@ -43,15 +43,19 @@ function closeGalleryEsc(e) {
   }
 }
 function findPictureNumber(img) {
-  for (var i=0; i<parameters.sortedPictures.length; i++) {
-    if (img.url.lastIndexOf(parameters.sortedPictures[i].url) > -1) return i;
+  for (var i = 0; i < parameters.sortedPictures.length; i++) {
+    if (img.url.lastIndexOf(parameters.sortedPictures[i].url) > -1) {
+      return i;
+    }
   }
   return false;
 }
 function showNextPicture(e) {
   e.preventDefault();
   imgInArray++;
-  if(imgInArray > parameters.sortedPictures.length - 1) imgInArray = 0;
+  if(imgInArray > parameters.sortedPictures.length - 1) {
+    imgInArray = 0;
+  }
   this.src = parameters.sortedPictures[imgInArray].url;
 }
 

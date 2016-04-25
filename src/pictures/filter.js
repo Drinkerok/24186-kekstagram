@@ -6,7 +6,9 @@ var createPage = require('./create_page');
 
 // обработчик на клик по фильтру
 settings.blockFilters.addEventListener('click', function(e) {
-  if(!e.target.classList.contains('filters-item')) return false;
+  if(!e.target.classList.contains('filters-item')) {
+    return false;
+  }
 
   var label = e.target;
   var filterName = label.getAttribute('for');
