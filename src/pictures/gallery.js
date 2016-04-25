@@ -32,12 +32,12 @@ var galleryCloseButton = document.querySelector('.gallery-overlay-close');
 
 var imgInArray;
 
-function closeGallery(){
+function closeGallery() {
   galleryOverlay.classList.add('invisible');
   window.removeEventListener('keydown', closeGalleryEsc);
   galleryImg.removeEventListener('click', showNextPicture);
 }
-function closeGalleryEsc(e){
+function closeGalleryEsc(e) {
   if (e.keyCode === 27) {
     closeGallery();
   }
@@ -46,22 +46,23 @@ function findPictureNumber(img) {
   for (var i=0; i<parameters.sortedPictures.length; i++) {
     if (img.url.lastIndexOf(parameters.sortedPictures[i].url) > -1) return i;
   }
+  return false;
 }
-function showNextPicture(e){
+function showNextPicture(e) {
   e.preventDefault();
   imgInArray++;
-  if (imgInArray > parameters.sortedPictures.length-1) imgInArray = 0;
+  if(imgInArray > parameters.sortedPictures.length - 1) imgInArray = 0;
   this.src = parameters.sortedPictures[imgInArray].url;
 }
 
-galleryCloseButton.addEventListener('click', function(e){
+galleryCloseButton.addEventListener('click', function(e) {
   e.preventDefault();
   closeGallery();
 });
 
 
 module.exports = {
-  showGallery: function(picture){
+  showGallery: function(picture) {
     galleryOverlay.classList.remove('invisible');
     galleryImg.src = picture.url;
     window.addEventListener('keydown', closeGalleryEsc);
@@ -70,8 +71,4 @@ module.exports = {
 
     galleryImg.addEventListener('click', showNextPicture);
   }
-}
-
-
-
-
+};

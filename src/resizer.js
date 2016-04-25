@@ -134,15 +134,15 @@
         var height = 10;
         // Войдет ли целое количество зигзагов
         var side = -x1 + x2;
-        var width_rest = side % width;
-        var zigzag_number = Math.floor(side / width);
+        var widthRest = side % width;
+        var zigzagNumber = Math.floor(side / width);
         // Если есть остаток, увеличиваем ширину
-        if (width_rest) {
-          width += width_rest / zigzag_number;
+        if (widthRest) {
+          width += widthRest / zigzagNumber;
         }
 
         var coord = x1;
-        for (var i = 0; i < zigzag_number; i++) {
+        for (var i = 0; i < zigzagNumber; i++) {
           // Верхняя граница
           drawHorizontalZigzag(coord, y1, canvas, width, height, false);
           // Нижняя граница

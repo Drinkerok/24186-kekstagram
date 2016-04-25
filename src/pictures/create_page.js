@@ -1,7 +1,6 @@
 'use strict';
 
 var parameters = require('./parameters');
-var settings = require('./parameters');
 var render = require('./render');
 
 // отрисовка "страницы" картинок
@@ -14,4 +13,4 @@ module.exports = {
     });
     parameters.pictures_settings.page++;
   }
-}
+};

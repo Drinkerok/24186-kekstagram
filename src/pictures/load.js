@@ -26,7 +26,7 @@ xhr.onload = function() {
 
 xhr.timeout = 10000;
 xhr.onerror = xhr.ontimeout = function() {
-  block_pictures.classList.add('pictures-failure');
+  settings.blockPictures.classList.add('pictures-failure');
 };
 
 xhr.send();

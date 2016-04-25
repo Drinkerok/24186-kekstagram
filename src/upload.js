@@ -97,14 +97,14 @@
   }
   // убрать все сообщения об ошибках
   function removeAllErrorBoxes() {
-    var error_divs = document.getElementsByClassName('error_box');
-    while (error_divs[0]) {
-      error_divs[0].parentNode.removeChild(error_divs[0]);
+    var errorDivs = document.getElementsByClassName('error_box');
+    while (errorDivs[0]) {
+      errorDivs[0].parentNode.removeChild(errorDivs[0]);
     }
   }
   // убрать сообщение об ошибках
-  function removeErrorBoxes(class_name) {
-    var error_div = document.querySelector('.' + class_name);
+  function removeErrorBoxes(className) {
+    var error_div = document.querySelector('.' + className);
     if (error_div) {
       error_div.parentNode.removeChild(error_div);
     }
@@ -112,10 +112,10 @@
   // Вывод ошибок
   function showValidateErrors(input, text) {
     input.classList.add('error');
-    var input_position = input.getBoundingClientRect();
+    var inputPosition = input.getBoundingClientRect();
     var error_box = {};
-    error_box.top = input_position.top - input.offsetHeight;
-    error_box.left = input_position.left;
+    error_box.top = inputPosition.top - input.offsetHeight;
+    error_box.left = inputPosition.left;
 
     createErrorBlock(input, text, error_box);
   }
@@ -396,15 +396,15 @@
 
     // сохраняем в куки
     var now = new Date();
-    var my_birthsday = new Date(0, 8, 6);
-    if (now.getMonth() > my_birthsday.getMonth() && now.getDate() > my_birthsday.getDate()) {
-      my_birthsday.setFullYear(now.getFullYear());
+    var myBirthsday = new Date(0, 8, 6);
+    if (now.getMonth() > myBirthsday.getMonth() && now.getDate() > myBirthsday.getDate()) {
+      myBirthsday.setFullYear(now.getFullYear());
     } else {
-      my_birthsday.setFullYear(now.getFullYear() - 1);
+      myBirthsday.setFullYear(now.getFullYear() - 1);
     }
-    var days_passed = Math.floor(Math.abs(now - my_birthsday) / 1000 / 60 / 60 / 24);
+    var daysPassed = Math.floor(Math.abs(now - myBirthsday) / 1000 / 60 / 60 / 24);
     browserCookies.set('filter', selectedFilter, {
-      expires: Date.now() + days_passed
+      expires: Date.now() + daysPassed
     });
 
     // Класс перезаписывается, а не обновляется через classList потому что нужно
