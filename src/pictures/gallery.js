@@ -5,6 +5,8 @@ var parameters = require('./parameters');
 var galleryOverlay = document.querySelector('.gallery-overlay');
 var galleryImg = document.querySelector('.gallery-overlay-image');
 var galleryCloseButton = document.querySelector('.gallery-overlay-close');
+var comments = document.querySelector('.comments-count');
+var likes = document.querySelector('.likes-count');
 
 
 // parameters.blockPictures.addEventListener('click', function(e) {
@@ -56,7 +58,10 @@ function showNextPicture(e) {
   if(imgInArray > parameters.sortedPictures.length - 1) {
     imgInArray = 0;
   }
-  this.src = parameters.sortedPictures[imgInArray].url;
+  var nextPicture = parameters.sortedPictures[imgInArray];
+  galleryImg.src = nextPicture.url;
+  comments.innerHTML = nextPicture.comments;
+  likes.innerHTML = nextPicture.likes;
 }
 
 galleryCloseButton.addEventListener('click', function(e) {
@@ -69,6 +74,8 @@ module.exports = {
   showGallery: function(picture) {
     galleryOverlay.classList.remove('invisible');
     galleryImg.src = picture.url;
+    comments.innerHTML = picture.comments;
+    likes.innerHTML = picture.likes;
     window.addEventListener('keydown', closeGalleryEsc);
 
     imgInArray = findPictureNumber(picture);
