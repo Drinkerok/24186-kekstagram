@@ -33,5 +33,7 @@ module.exports = {
     }, 10000);
 
     container.appendChild(picture);
+
+    return picture;
   }
 }

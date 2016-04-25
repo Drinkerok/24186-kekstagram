@@ -16,7 +16,10 @@ settings.blockFilters.addEventListener('click', function(e) {
     // сортируем
     settings.sortedPictures = sortPictures(settings.pictures, filter_name);
     // удаляем старые картинки
-    settings.blockPictures.innerHTML = '';
+    settings.renderedPictures.forEach(function(picture){
+      picture.remove();
+    });
+    settings.renderedPictures = [];
     // начинаем с первой картинки
     settings.pictures_settings.page = 0;
     // выводим картинки

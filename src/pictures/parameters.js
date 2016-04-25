@@ -38,5 +38,6 @@ module.exports = {
     // храним картинки
     this.pictures = pictures;
     this.sortedPictures = pictures;
+    this.renderedPictures = [];
   }
 }
