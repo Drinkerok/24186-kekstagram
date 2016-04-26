@@ -22,7 +22,7 @@ function Gallery() {
     this.imgInArray = self.findPictureNumber(picture);
     self.galleryImg.addEventListener('click', self.showNextPicture);
   };
-  this.closeGallery = function(e) {
+  this.closeGallery = function() {
     this.galleryCloseButton.removeEventListener('click', self.onCloseButtonClick);
     window.removeEventListener('keydown', self.closeGalleryEsc);
     self.galleryImg.removeEventListener('click', self.showNextPicture);
@@ -57,7 +57,7 @@ function Gallery() {
     self.commentsBlock.innerHTML = nextPicture.comments;
     self.likesBlock.innerHTML = nextPicture.likes;
   };
-};
+}
 
 module.exports = {
   gallery: new Gallery()
