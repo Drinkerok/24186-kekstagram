@@ -2,84 +2,63 @@
 
 var parameters = require('./parameters');
 
-var galleryOverlay = document.querySelector('.gallery-overlay');
-var galleryImg = document.querySelector('.gallery-overlay-image');
-var galleryCloseButton = document.querySelector('.gallery-overlay-close');
-var comments = document.querySelector('.comments-count');
-var likes = document.querySelector('.likes-count');
+function Gallery() {
+  var self = this;
+  this.galleryOverlay = document.querySelector('.gallery-overlay');
+  this.galleryImg = document.querySelector('.gallery-overlay-image');
+  this.galleryCloseButton = document.querySelector('.gallery-overlay-close');
+  this.commentsBlock = document.querySelector('.comments-count');
+  this.likesBlock = document.querySelector('.likes-count');
+  this.imgInArray = 0;
 
+  this.showGallery = function(picture) {
+    this.galleryOverlay.classList.remove('invisible');
+    this.galleryImg.src = picture.url;
+    this.commentsBlock.innerHTML = picture.comments;
+    this.likesBlock.innerHTML = picture.likes;
+    window.addEventListener('keydown', self.closeGalleryEsc);
+    this.galleryCloseButton.addEventListener('click', self.onCloseButtonClick);
 
-// parameters.blockPictures.addEventListener('click', function(e) {
-//   e.preventDefault();
-//   if (e.target.nodeName !== 'IMG') return false;
-
-//   var img = e.target;
-//   showGallery(img);
-//   // номер картикнки в массиве картинок
-//   var imgInArray = findPictureNumber(img);
-
-//   galleryImg.addEventListener('click', function(e) {
-//     e.preventDefault();
-//     imgInArray++;
-//     if (imgInArray > parameters.sortedPictures.length-1) imgInArray = 0;
-//     this.src = parameters.sortedPictures[imgInArray].url;
-//   })
-
-//   window.addEventListener('keydown', function(e) {
-//     if (e.keyCode === 27) {
-//       closeGallery();
-//     }
-//   });
-// })
-
-var imgInArray;
-
-function closeGallery() {
-  galleryOverlay.classList.add('invisible');
-  window.removeEventListener('keydown', closeGalleryEsc);
-  galleryImg.removeEventListener('click', showNextPicture);
-}
-function closeGalleryEsc(e) {
-  if (e.keyCode === 27) {
-    closeGallery();
-  }
-}
-function findPictureNumber(img) {
-  for (var i = 0; i < parameters.sortedPictures.length; i++) {
-    if (img.url.lastIndexOf(parameters.sortedPictures[i].url) > -1) {
-      return i;
+    this.imgInArray = self.findPictureNumber(picture);
+    self.galleryImg.addEventListener('click', self.showNextPicture);
+  };
+  this.closeGallery = function(e) {
+    this.galleryCloseButton.removeEventListener('click', self.onCloseButtonClick);
+    window.removeEventListener('keydown', self.closeGalleryEsc);
+    self.galleryImg.removeEventListener('click', self.showNextPicture);
+    self.galleryOverlay.classList.add('invisible');
+  };
+  this.closeGalleryEsc = function(e) {
+    if (e.keyCode === 27) {
+      self.closeGallery();
     }
-  }
-  return false;
-}
-function showNextPicture(e) {
-  e.preventDefault();
-  imgInArray++;
-  if(imgInArray > parameters.sortedPictures.length - 1) {
-    imgInArray = 0;
-  }
-  var nextPicture = parameters.sortedPictures[imgInArray];
-  galleryImg.src = nextPicture.url;
-  comments.innerHTML = nextPicture.comments;
-  likes.innerHTML = nextPicture.likes;
-}
-
-galleryCloseButton.addEventListener('click', function(e) {
-  e.preventDefault();
-  closeGallery();
-});
-
+  };
+  this.onCloseButtonClick = function(e) {
+    e.preventDefault();
+    self.closeGallery();
+  };
+  this.findPictureNumber = function(img) {
+    for (var i = 0; i < parameters.sortedPictures.length; i++) {
+      if (img.url.lastIndexOf(parameters.sortedPictures[i].url) > -1) {
+        return i;
+      }
+    }
+    return false;
+  };
+  this.showNextPicture = function(e) {
+    var nextPicture;
+    e.preventDefault();
+    self.imgInArray++;
+    if (self.imgInArray > parameters.sortedPictures.length - 1) {
+      self.imgInArray = 0;
+    }
+    nextPicture = parameters.sortedPictures[self.imgInArray];
+    self.galleryImg.src = nextPicture.url;
+    self.commentsBlock.innerHTML = nextPicture.comments;
+    self.likesBlock.innerHTML = nextPicture.likes;
+  };
+};
 
 module.exports = {
-  showGallery: function(picture) {
-    galleryOverlay.classList.remove('invisible');
-    galleryImg.src = picture.url;
-    comments.innerHTML = picture.comments;
-    likes.innerHTML = picture.likes;
-    window.addEventListener('keydown', closeGalleryEsc);
-
-    imgInArray = findPictureNumber(picture);
-
-    galleryImg.addEventListener('click', showNextPicture);
-  }
+  gallery: new Gallery()
 };

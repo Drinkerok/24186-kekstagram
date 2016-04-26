@@ -4,13 +4,13 @@ var createImg = require('./create_img');
 var gallery = require('./gallery');
 
 module.exports = {
-  RenderPicture: function(data) {
+  RenderedPicture: function(data) {
     this.data = data;
     this.picture = createImg.createPicture(this.data, parameters.blockPictures);
 
     this.onPictureClick = function(e) {
       e.preventDefault();
-      gallery.showGallery(data);
+      gallery.gallery.showGallery(data);
     };
 
     this.remove = function() {
