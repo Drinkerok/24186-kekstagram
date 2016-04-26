@@ -4,7 +4,7 @@ var pictures;
 var settings = require('./parameters');
 var createPicturesPage = require('./create_page');
 var fillPicturesBlock = require('./fill_pictures_block');
-var enable_scroll = require('./scroll');
+var enableScroll = require('./scroll');
 
 
 
@@ -21,7 +21,7 @@ xhr.onload = function() {
   // подгружаем еще картинки
   fillPicturesBlock(pictures);
   settings.blockFilters.classList.remove('hidden');
-  enable_scroll();
+  enableScroll();
 };
 
 xhr.timeout = 10000;
