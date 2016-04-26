@@ -2,7 +2,7 @@
 
 var activeFilter = 'filter-popular';
 var settings = require('./parameters');
-var createPage = require('./create_page');
+var createPicturesPage = require('./create_page');
 
 // обработчик на клик по фильтру
 settings.blockFilters.addEventListener('click', function(e) {
@@ -25,7 +25,7 @@ settings.blockFilters.addEventListener('click', function(e) {
     // начинаем с первой картинки
     settings.pictures_settings.page = 0;
     // выводим картинки
-    createPage.createPicturesPage(settings.sortedPictures);
+    createPicturesPage(settings.sortedPictures);
   }
 
   return false;

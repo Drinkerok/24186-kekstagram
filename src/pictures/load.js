@@ -2,9 +2,9 @@
 
 var pictures;
 var settings = require('./parameters');
-var createPage = require('./create_page');
-var fillBlock = require('./fill_pictures_block');
-var scroll = require('./scroll');
+var createPicturesPage = require('./create_page');
+var fillPicturesBlock = require('./fill_pictures_block');
+var enable_scroll = require('./scroll');
 
 
 
@@ -16,12 +16,12 @@ xhr.open('GET', 'http://o0.github.io/assets/json/pictures.json');
 xhr.onload = function() {
   pictures = JSON.parse(this.response);
   settings.setParameters(pictures);
-  createPage.createPicturesPage(pictures);
+  createPicturesPage(pictures);
   // Если при загрузке первой партии картинок, конец блока виден,
   // подгружаем еще картинки
-  fillBlock.fillPicturesBlock(pictures);
+  fillPicturesBlock(pictures);
   settings.blockFilters.classList.remove('hidden');
-  scroll.enable_scroll();
+  enable_scroll();
 };
 
 xhr.timeout = 10000;

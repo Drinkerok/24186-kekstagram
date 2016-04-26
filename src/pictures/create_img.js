@@ -10,30 +10,28 @@ if ('content' in template) {
 }
 
 
-module.exports = {
-  createPicture: function(data, container) {
-    var picture = templatePicture.cloneNode(true);
-    picture.querySelector('.picture-comments').textContent = data.comments;
-    picture.querySelector('.picture-likes').textContent = data.likes;
+module.exports = function(data, container) {
+  var picture = templatePicture.cloneNode(true);
+  picture.querySelector('.picture-comments').textContent = data.comments;
+  picture.querySelector('.picture-likes').textContent = data.likes;
 
-    var img = picture.getElementsByTagName('IMG')[0];
+  var img = picture.getElementsByTagName('IMG')[0];
 
-    var pictureImage = new Image();
-    pictureImage.onload = function() {
-      clearTimeout(pictureLoadTimeout);
-      img.src = pictureImage.src;
-    };
-    pictureImage.onerror = function() {
-      picture.classList.add('picture-load-failure');
-    };
-    pictureImage.src = data.url;
+  var pictureImage = new Image();
+  pictureImage.onload = function() {
+    clearTimeout(pictureLoadTimeout);
+    img.src = pictureImage.src;
+  };
+  pictureImage.onerror = function() {
+    picture.classList.add('picture-load-failure');
+  };
+  pictureImage.src = data.url;
 
-    var pictureLoadTimeout = setTimeout(function() {
-      picture.classList.add('picture-load-failure');
-    }, 10000);
+  var pictureLoadTimeout = setTimeout(function() {
+    picture.classList.add('picture-load-failure');
+  }, 10000);
 
-    container.appendChild(picture);
+  container.appendChild(picture);
 
-    return picture;
-  }
+  return picture;
 };

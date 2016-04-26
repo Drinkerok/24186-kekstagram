@@ -59,6 +59,4 @@ function Gallery() {
   };
 }
 
-module.exports = {
-  gallery: new Gallery()
-};
+module.exports = new Gallery();

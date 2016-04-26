@@ -3,12 +3,10 @@
 var utilites = require('./utilites');
 var settings = require('./parameters');
 var loaded = require('./load');
-var createPage = require('./create_page');
+var createPicturesPage = require('./create_page');
 
-module.exports = {
-  fillPicturesBlock: function() {
-    while (utilites.isBottomReached(settings.blockPictures) && (settings.pictures_settings.page <= settings.pictures_settings.page_max)) {
-      createPage.createPicturesPage(loaded.sortedPictures);
-    }
+module.exports = function() {
+  while (utilites.isBottomReached(settings.blockPictures) && (settings.pictures_settings.page <= settings.pictures_settings.page_max)) {
+    createPicturesPage(loaded.sortedPictures);
   }
 };
