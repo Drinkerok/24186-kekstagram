@@ -1,6 +1,7 @@
 'use strict';
 
 var parameters = require('./parameters');
+var noPhotoPath = 'photos/no-photo.jpg';
 
 function Gallery() {
   var self = this;
@@ -53,7 +54,16 @@ function Gallery() {
       self.imgInArray = 0;
     }
     nextPicture = parameters.sortedPictures[self.imgInArray];
-    self.galleryImg.src = nextPicture.url;
+
+    var nextImage = new Image();
+    nextImage.onload = function() {
+      self.galleryImg.src = nextImage.src;
+    };
+    nextImage.onerror = function() {
+      self.galleryImg.src = noPhotoPath;
+    };
+    nextImage.src = nextPicture.url;
+
     self.commentsBlock.innerHTML = nextPicture.comments;
     self.likesBlock.innerHTML = nextPicture.likes;
   };
