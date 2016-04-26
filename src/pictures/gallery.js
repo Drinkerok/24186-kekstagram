@@ -1,7 +1,24 @@
 'use strict';
 
 var parameters = require('./parameters');
-var noPhotoPath = 'photos/no-photo.jpg';
+
+function loadImage(imageToShow, imageHtml){
+  var pictureLoadTimeout;
+  var nextImage = new Image();
+  var noPhotoPath = 'photos/no-photo.jpg';
+
+  nextImage.onload = function() {
+    clearTimeout(pictureLoadTimeout);
+    imageHtml.src = nextImage.src;
+  };
+  nextImage.onerror = function() {
+    imageHtml.src = noPhotoPath;
+  };
+  nextImage.src = imageToShow.url;
+  pictureLoadTimeout = setTimeout(function() {
+    imageHtml.src = noPhotoPath;
+  }, 10000);
+}
 
 function Gallery() {
   var self = this;
@@ -14,7 +31,7 @@ function Gallery() {
 
   this.showGallery = function(picture) {
     this.galleryOverlay.classList.remove('invisible');
-    this.galleryImg.src = picture.url;
+    loadImage(picture, this.galleryImg);
     this.commentsBlock.innerHTML = picture.comments;
     this.likesBlock.innerHTML = picture.likes;
     window.addEventListener('keydown', self.closeGalleryEsc);
@@ -48,7 +65,6 @@ function Gallery() {
   };
   this.showNextPicture = function(e) {
     var nextPicture;
-    var pictureLoadTimeout;
     e.preventDefault();
     self.imgInArray++;
     if (self.imgInArray > parameters.sortedPictures.length - 1) {
@@ -56,18 +72,7 @@ function Gallery() {
     }
     nextPicture = parameters.sortedPictures[self.imgInArray];
 
-    var nextImage = new Image();
-    nextImage.onload = function() {
-      clearTimeout(pictureLoadTimeout);
-      self.galleryImg.src = nextImage.src;
-    };
-    nextImage.onerror = function() {
-      self.galleryImg.src = noPhotoPath;
-    };
-    nextImage.src = nextPicture.url;
-    pictureLoadTimeout = setTimeout(function() {
-      self.galleryImg.src = noPhotoPath;
-    }, 10000);
+    loadImage(nextPicture, self.galleryImg);
 
     self.commentsBlock.innerHTML = nextPicture.comments;
     self.likesBlock.innerHTML = nextPicture.likes;
