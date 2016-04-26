@@ -48,6 +48,7 @@ function Gallery() {
   };
   this.showNextPicture = function(e) {
     var nextPicture;
+    var pictureLoadTimeout;
     e.preventDefault();
     self.imgInArray++;
     if (self.imgInArray > parameters.sortedPictures.length - 1) {
@@ -57,12 +58,16 @@ function Gallery() {
 
     var nextImage = new Image();
     nextImage.onload = function() {
+      clearTimeout(pictureLoadTimeout);
       self.galleryImg.src = nextImage.src;
     };
     nextImage.onerror = function() {
       self.galleryImg.src = noPhotoPath;
     };
     nextImage.src = nextPicture.url;
+    pictureLoadTimeout = setTimeout(function() {
+      self.galleryImg.src = noPhotoPath;
+    }, 10000);
 
     self.commentsBlock.innerHTML = nextPicture.comments;
     self.likesBlock.innerHTML = nextPicture.likes;
