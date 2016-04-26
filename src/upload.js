@@ -277,6 +277,7 @@
     form.resize_size.value = Math.min(resizer._image.naturalWidth, resizer._image.naturalHeight);
   }
   function setRequirements(resizer, form) {
+    var myUndefined;
     form.resize_x.min = 0;
     form.resize_y.min = 0;
     form.resize_size.min = 1;
@@ -301,10 +302,10 @@
       currentResizer.setConstraint(+this.value);
     });
     form.resize_y.addEventListener('input', function() {
-      currentResizer.setConstraint(undefined, +this.value);
+      currentResizer.setConstraint(myUndefined, +this.value);
     });
     form.resize_size.addEventListener('input', function() {
-      currentResizer.setConstraint(undefined, undefined, +this.value);
+      currentResizer.setConstraint(myUndefined, myUndefined, +this.value);
     });
 
 
