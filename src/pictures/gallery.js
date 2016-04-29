@@ -2,7 +2,7 @@
 
 var parameters = require('./parameters');
 
-function loadImage(imageToShow, imageHtml){
+function loadImage(imageToShow, imageHtml) {
   var pictureLoadTimeout;
   var nextImage = new Image();
   var noPhotoPath = 'photos/no-photo.jpg';

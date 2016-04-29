@@ -2,7 +2,6 @@
 
 var utilites = require('./utilites');
 var settings = require('./parameters');
-var loaded = require('./load');
 var createPicturesPage = require('./create_page');
 
 module.exports = function() {

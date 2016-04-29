@@ -10,7 +10,7 @@ var enableScroll = require('./scroll');
 
 // Получаем картинки
 var xhr = new XMLHttpRequest();
-xhr.open('GET', 'http://o0.github.io/assets/json/pictures.json');
+xhr.open('GET', 'https://o0.github.io/assets/json/pictures.json');
 
 // как получили, выводим их. И открываем фильтры
 xhr.onload = function() {
