@@ -5,6 +5,7 @@ var settings = require('./parameters');
 var createPicturesPage = require('./create_page');
 var fillPicturesBlock = require('./fill_pictures_block');
 var enableScroll = require('./scroll');
+var filter = require('./filter');
 
 
 
@@ -16,10 +17,11 @@ xhr.open('GET', 'https://o0.github.io/assets/json/pictures.json');
 xhr.onload = function() {
   pictures = JSON.parse(this.response);
   settings.setParameters(pictures);
-  createPicturesPage(pictures);
+  filter(pictures);
+  createPicturesPage(settings.sortedPictures);
   // Если при загрузке первой партии картинок, конец блока виден,
   // подгружаем еще картинки
-  fillPicturesBlock(pictures);
+  fillPicturesBlock(settings.sortedPictures);
   settings.blockFilters.classList.remove('hidden');
   enableScroll();
 };

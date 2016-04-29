@@ -2,7 +2,6 @@
 require('./load');
 require('./parameters');
 require('./create_page');
-require('./filter');
 
 
 

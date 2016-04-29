@@ -21,6 +21,11 @@ module.exports = {
   blockPictures: picturesBlock,
   blockFilters: filtersBlock,
   setParameters: function(pictures) {
+    // храним картинки
+    this.pictures = pictures;
+    this.sortedPictures = [];
+    this.renderedPictures = [];
+
     this.pictures_settings.container = parseInt(getComputedStyle(this.blockPictures).width, 10);
     if (this.pictures_settings.container < this.pictures_settings.container_break_point) {
       this.pictures_settings.per_page = PICTURES_980_PER_PAGE;
@@ -33,10 +38,5 @@ module.exports = {
                                   : (Math.ceil(pictures.length / this.pictures_settings.per_page) - 1);
     this.pictures_settings.offset = this.pictures_settings.first_page - this.pictures_settings.per_page;
     this.pictures_settings.page = 0;
-
-    // храним картинки
-    this.pictures = pictures;
-    this.sortedPictures = pictures;
-    this.renderedPictures = [];
   }
 };

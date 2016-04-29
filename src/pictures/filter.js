@@ -1,8 +1,15 @@
 'use strict';
 
-var activeFilter = 'filter-popular';
+var DEFAULT_FILTER = 'filter-popular';
+var activeFilter = localStorage.getItem('activeFilter') || DEFAULT_FILTER;
 var settings = require('./parameters');
 var createPicturesPage = require('./create_page');
+
+// устанавливаем начальный активный фильтр
+// если он отличается от стандартного
+settings.blockFilters.querySelector('input[checked]').checked = '';
+document.getElementById(activeFilter).checked = 'checked';
+settings.filter = activeFilter;
 
 // обработчик на клик по фильтру
 settings.blockFilters.addEventListener('click', function(e) {
@@ -13,22 +20,24 @@ settings.blockFilters.addEventListener('click', function(e) {
   var label = e.target;
   var filterName = label.getAttribute('for');
   // если выбран активный фильтр, то ничего не делать
-  if (filterName !== activeFilter) {
-    activeFilter = filterName;
-    // сортируем
-    settings.sortedPictures = sortPictures(settings.pictures, filterName);
-    // удаляем старые картинки
-    settings.renderedPictures.forEach(function(picture) {
-      picture.remove();
-    });
-    settings.renderedPictures = [];
-    // начинаем с первой картинки
-    settings.pictures_settings.page = 0;
-    // выводим картинки
-    createPicturesPage(settings.sortedPictures);
+  if (filterName === activeFilter) {
+    return false;
   }
 
-  return false;
+  localStorage.setItem('activeFilter', filterName);
+  activeFilter = filterName;
+
+  // сортируем
+  settings.sortedPictures = sortPictures(settings.pictures, filterName);
+  // удаляем старые картинки
+  settings.renderedPictures.forEach(function(picture) {
+    picture.remove();
+  });
+  settings.renderedPictures = [];
+  // начинаем с первой картинки
+  settings.pictures_settings.page = 0;
+  // выводим картинки
+  createPicturesPage(settings.sortedPictures);
 });
 
 
@@ -51,3 +60,7 @@ function sortPictures(arr, sorting) {
   }
   return sortedPictures;
 }
+
+module.exports = function() {
+  settings.sortedPictures = sortPictures(settings.pictures, settings.filter);
+};
