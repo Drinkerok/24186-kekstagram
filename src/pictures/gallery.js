@@ -30,21 +30,27 @@ function Gallery() {
   this.imgInArray = 0;
 
   this.showGallery = function(picture) {
-    this.galleryOverlay.classList.remove('invisible');
-    loadImage(picture, this.galleryImg);
-    this.commentsBlock.innerHTML = picture.comments;
-    this.likesBlock.innerHTML = picture.likes;
-    window.addEventListener('keydown', self.closeGalleryEsc);
-    this.galleryCloseButton.addEventListener('click', self.onCloseButtonClick);
-
-    this.imgInArray = self.findPictureNumber(picture);
-    self.galleryImg.addEventListener('click', self.showNextPicture);
+    window.location.hash = picture.url;
   };
+  this.showPicture = function() {
+    var picture = self.findPictureByUrl(window.location.hash.slice(1));
+    self.galleryOverlay.classList.remove('invisible');
+    loadImage(picture, this.galleryImg);
+    self.commentsBlock.innerHTML = picture.comments;
+    self.likesBlock.innerHTML = picture.likes;
+    window.addEventListener('keydown', self.closeGalleryEsc);
+    self.galleryCloseButton.addEventListener('click', self.onCloseButtonClick);
+
+    self.imgInArray = self.findPictureNumber(picture);
+    self.galleryImg.addEventListener('click', self.showNextPicture);
+  }
   this.closeGallery = function() {
-    this.galleryCloseButton.removeEventListener('click', self.onCloseButtonClick);
+    self.galleryCloseButton.removeEventListener('click', self.onCloseButtonClick);
     window.removeEventListener('keydown', self.closeGalleryEsc);
     self.galleryImg.removeEventListener('click', self.showNextPicture);
     self.galleryOverlay.classList.add('invisible');
+
+    window.location.hash = '';
   };
   this.closeGalleryEsc = function(e) {
     if (e.keyCode === 27) {
@@ -63,6 +69,14 @@ function Gallery() {
     }
     return false;
   };
+  this.findPictureByUrl = function(url) {
+    for (var i = 0; i < parameters.sortedPictures.length; i++) {
+      if (parameters.sortedPictures[i].url === url) {
+        return parameters.sortedPictures[i];
+      }
+    }
+    return false;
+  };
   this.showNextPicture = function(e) {
     var nextPicture;
     e.preventDefault();
@@ -71,12 +85,22 @@ function Gallery() {
       self.imgInArray = 0;
     }
     nextPicture = parameters.sortedPictures[self.imgInArray];
-
-    loadImage(nextPicture, self.galleryImg);
-
-    self.commentsBlock.innerHTML = nextPicture.comments;
-    self.likesBlock.innerHTML = nextPicture.likes;
+    window.location.hash = nextPicture.url;
   };
+  this.checkUrl = function() {
+    if (window.location.hash.match(/#photos\/(\S+)/)){
+      self.showPicture();
+    }
+  }
+
+  // обработчик смены hash
+  window.addEventListener('hashchange', function() {
+    if (window.location.hash === '') {
+      self.closeGallery();
+    } else if (window.location.hash.match(/#photos\/(\S+)/) || window.location.hash.match('failed')){
+      self.showPicture();
+    }
+  })
 }
 
 module.exports = new Gallery();
