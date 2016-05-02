@@ -28,7 +28,7 @@ settings.blockFilters.addEventListener('click', function(e) {
   activeFilter = filterName;
 
   // сортируем
-  settings.sortedPictures = sortPictures(settings.pictures, filterName);
+  settings.sortedPictures = sortPictures(settings.loadedPictures, filterName);
   // удаляем старые картинки
   settings.renderedPictures.forEach(function(picture) {
     picture.remove();
@@ -64,5 +64,5 @@ function sortPictures(arr, sorting) {
 }
 
 module.exports = function() {
-  settings.sortedPictures = sortPictures(settings.pictures, settings.filter);
+  settings.sortedPictures = sortPictures(settings.loadedPictures, settings.filter);
 };

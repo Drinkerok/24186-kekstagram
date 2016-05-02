@@ -28,6 +28,7 @@ function Gallery() {
   this.commentsBlock = document.querySelector('.comments-count');
   this.likesBlock = document.querySelector('.likes-count');
   this.imgInArray = 0;
+  this.picture;
 
   this.showPicture = this.showPicture.bind(this);
   this.closeGallery = this.closeGallery.bind(this);
@@ -35,6 +36,9 @@ function Gallery() {
   this.onCloseButtonClick = this.onCloseButtonClick.bind(this);
   this.showNextPicture = this.showNextPicture.bind(this);
   this.checkUrl = this.checkUrl.bind(this);
+  this.onLikesClick = this.onLikesClick.bind(this);
+
+  this.likesBlock.addEventListener('click', this.onLikesClick);
 
   // обработчик смены hash
   window.addEventListener('hashchange', this.hashChange.bind(this));
@@ -44,15 +48,15 @@ Gallery.prototype.showGallery = function(picture) {
   window.location.hash = picture.url;
 };
 Gallery.prototype.showPicture = function() {
-  var picture = this.findPictureByUrl(window.location.hash.slice(1));
+  this.picture = this.findPictureByUrl(window.location.hash.slice(1), parameters.sortedPictures);
   this.galleryOverlay.classList.remove('invisible');
-  loadImage(picture, this.galleryImg);
-  this.commentsBlock.innerHTML = picture.comments;
-  this.likesBlock.innerHTML = picture.likes;
+  loadImage(this.picture, this.galleryImg);
+  this.commentsBlock.innerHTML = this.picture.comments;
+  this.likesBlock.innerHTML = this.picture.likes;
   window.addEventListener('keydown', this.closeGalleryEsc);
   this.galleryCloseButton.addEventListener('click', this.onCloseButtonClick);
 
-  this.imgInArray = this.findPictureNumber(picture);
+  this.imgInArray = this.findPictureNumber(this.picture);
   this.galleryImg.addEventListener('click', this.showNextPicture);
 };
 Gallery.prototype.closeGallery = function() {
@@ -80,10 +84,18 @@ Gallery.prototype.findPictureNumber = function(img) {
   }
   return false;
 };
-Gallery.prototype.findPictureByUrl = function(url) {
-  for (var i = 0; i < parameters.sortedPictures.length; i++) {
-    if (parameters.sortedPictures[i].url === url) {
-      return parameters.sortedPictures[i];
+Gallery.prototype.findPictureByUrl = function(url, arr, deep) {
+  if (!deep) {
+    for (var i = 0; i < arr.length; i++) {
+      if (arr[i].url === url) {
+        return arr[i];
+      }
+    }
+  } else {
+    for (var i = 0; i < arr.length; i++) {
+      if (arr[i].data.url === url) {
+        return arr[i];
+      }
     }
   }
   return false;
@@ -110,5 +122,15 @@ Gallery.prototype.hashChange = function() {
     this.showPicture();
   }
 };
+Gallery.prototype.onLikesClick = function(e) {
+  e.preventDefault();
+  this.picture.increaseLikes();
+  // Если картинка отрисована, меняем у нее счетчик
+  var pictureInRenderedArray = this.findPictureByUrl(this.picture.url, parameters.renderedPictures, true);
+  if (pictureInRenderedArray != -1) {
+    pictureInRenderedArray.increaseLikes();
+  }
+  e.target.innerHTML = +(e.target.innerHTML) + 1;
+}
 
 module.exports = new Gallery();

@@ -8,6 +8,7 @@ var utilites = require('./utilites');
 function RenderedPicture(data) {
   this.data = data;
   this.picture = createPicture(this.data);
+  this.likesBlock = this.picture.querySelector('.picture-likes');
 
 
   this.onPictureClick = function(e) {
@@ -25,6 +26,10 @@ function RenderedPicture(data) {
     domConstructor.prototype.add.apply(this, [this.picture, parameters.blockPictures]);
     // parameters.blockPictures.appendChild(this.picture);
   };
+
+  this.increaseLikes = function() {
+    this.likesBlock.innerHTML = +this.likesBlock.innerHTML + 1;
+  }
 
   this.add();
   this.picture.addEventListener('click', this.onPictureClick);

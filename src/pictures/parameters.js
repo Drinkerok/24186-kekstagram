@@ -1,4 +1,5 @@
 'use strict';
+var LoadedPicture = require('./loadedPicture');
 
 var PICTURES_980_PER_PAGE = 10;
 var PICTURES_980_FIRST_PAGE = 11;
@@ -20,11 +21,19 @@ module.exports = {
   },
   blockPictures: picturesBlock,
   blockFilters: filtersBlock,
+
   setParameters: function(pictures) {
+    var loadedArray = [];
     // храним картинки
     this.pictures = pictures;
     this.sortedPictures = [];
     this.renderedPictures = [];
+    
+
+    this.pictures.forEach(function(picture) {
+      loadedArray.push(new LoadedPicture(picture));
+    });
+    this.loadedPictures = loadedArray.slice();
 
     this.pictures_settings.container = parseInt(getComputedStyle(this.blockPictures).width, 10);
     if (this.pictures_settings.container < this.pictures_settings.container_break_point) {

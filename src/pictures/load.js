@@ -17,7 +17,7 @@ xhr.open('GET', 'https://o0.github.io/assets/json/pictures.json');
 xhr.onload = function() {
   pictures = JSON.parse(this.response);
   settings.setParameters(pictures);
-  filter(pictures);
+  filter(settings.loadedPictures);
   createPicturesPage(settings.sortedPictures);
   settings.blockFilters.classList.remove('hidden');
   enableScroll();
