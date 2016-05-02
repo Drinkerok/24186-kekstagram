@@ -20,7 +20,7 @@ function LoadedPicture(picture) {
   };
   this.increaseLikes = function() {
     return ++this.likes;
-  }
+  };
 }
 
 module.exports = LoadedPicture;

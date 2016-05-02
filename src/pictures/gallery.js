@@ -28,7 +28,6 @@ function Gallery() {
   this.commentsBlock = document.querySelector('.comments-count');
   this.likesBlock = document.querySelector('.likes-count');
   this.imgInArray = 0;
-  this.picture;
 
   this.showPicture = this.showPicture.bind(this);
   this.closeGallery = this.closeGallery.bind(this);
@@ -92,7 +91,7 @@ Gallery.prototype.findPictureByUrl = function(url, arr, deep) {
       }
     }
   } else {
-    for (var i = 0; i < arr.length; i++) {
+    for (i = 0; i < arr.length; i++) {
       if (arr[i].data.url === url) {
         return arr[i];
       }
@@ -127,10 +126,10 @@ Gallery.prototype.onLikesClick = function(e) {
   this.picture.increaseLikes();
   // Если картинка отрисована, меняем у нее счетчик
   var pictureInRenderedArray = this.findPictureByUrl(this.picture.url, parameters.renderedPictures, true);
-  if (pictureInRenderedArray != -1) {
+  if (pictureInRenderedArray !== -1) {
     pictureInRenderedArray.increaseLikes();
   }
   e.target.innerHTML = +(e.target.innerHTML) + 1;
-}
+};
 
 module.exports = new Gallery();

@@ -28,7 +28,6 @@ module.exports = {
     this.pictures = pictures;
     this.sortedPictures = [];
     this.renderedPictures = [];
-    
 
     this.pictures.forEach(function(picture) {
       loadedArray.push(new LoadedPicture(picture));

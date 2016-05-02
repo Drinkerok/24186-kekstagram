@@ -29,7 +29,7 @@ function RenderedPicture(data) {
 
   this.increaseLikes = function() {
     this.likesBlock.innerHTML = +this.likesBlock.innerHTML + 1;
-  }
+  };
 
   this.add();
   this.picture.addEventListener('click', this.onPictureClick);
