@@ -10,7 +10,7 @@ if ('content' in template) {
 }
 
 
-module.exports = function(data, container) {
+module.exports = function(data) {
   var picture = templatePicture.cloneNode(true);
   picture.querySelector('.picture-comments').textContent = data.comments;
   picture.querySelector('.picture-likes').textContent = data.likes;
@@ -30,8 +30,6 @@ module.exports = function(data, container) {
   var pictureLoadTimeout = setTimeout(function() {
     picture.classList.add('picture-load-failure');
   }, 10000);
-
-  container.appendChild(picture);
 
   return picture;
 };

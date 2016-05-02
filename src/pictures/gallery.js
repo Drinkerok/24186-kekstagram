@@ -42,7 +42,7 @@ function Gallery() {
 
 Gallery.prototype.showGallery = function(picture) {
   window.location.hash = picture.url;
-}
+};
 Gallery.prototype.showPicture = function() {
   var picture = this.findPictureByUrl(window.location.hash.slice(1));
   this.galleryOverlay.classList.remove('invisible');
@@ -54,7 +54,7 @@ Gallery.prototype.showPicture = function() {
 
   this.imgInArray = this.findPictureNumber(picture);
   this.galleryImg.addEventListener('click', this.showNextPicture);
-}
+};
 Gallery.prototype.closeGallery = function() {
   this.galleryCloseButton.removeEventListener('click', this.onCloseButtonClick);
   window.removeEventListener('keydown', this.closeGalleryEsc);
@@ -62,16 +62,16 @@ Gallery.prototype.closeGallery = function() {
   this.galleryOverlay.classList.add('invisible');
 
   window.location.hash = '';
-}
+};
 Gallery.prototype.closeGalleryEsc = function(e) {
   if (e.keyCode === 27) {
     this.closeGallery();
   }
-}
+};
 Gallery.prototype.onCloseButtonClick = function(e) {
   e.preventDefault();
   this.closeGallery();
-}
+};
 Gallery.prototype.findPictureNumber = function(img) {
   for (var i = 0; i < parameters.sortedPictures.length; i++) {
     if (img.url.lastIndexOf(parameters.sortedPictures[i].url) > -1) {
@@ -79,7 +79,7 @@ Gallery.prototype.findPictureNumber = function(img) {
     }
   }
   return false;
-}
+};
 Gallery.prototype.findPictureByUrl = function(url) {
   for (var i = 0; i < parameters.sortedPictures.length; i++) {
     if (parameters.sortedPictures[i].url === url) {
@@ -87,7 +87,7 @@ Gallery.prototype.findPictureByUrl = function(url) {
     }
   }
   return false;
-}
+};
 Gallery.prototype.showNextPicture = function(e) {
   var nextPicture;
   e.preventDefault();
@@ -97,18 +97,18 @@ Gallery.prototype.showNextPicture = function(e) {
   }
   nextPicture = parameters.sortedPictures[this.imgInArray];
   window.location.hash = nextPicture.url;
-}
+};
 Gallery.prototype.checkUrl = function() {
   if (window.location.hash.match(/#photos\/(\S+)/)) {
     this.showPicture();
   }
-}
+};
 Gallery.prototype.hashChange = function() {
   if (window.location.hash === '') {
     this.closeGallery();
   } else if (window.location.hash.match(/#photos\/(\S+)/) || window.location.hash.match('failed')) {
     this.showPicture();
   }
-}
+};
 
 module.exports = new Gallery();
