@@ -24,7 +24,7 @@ function RenderedPicture(data) {
   this.add = function() {
     domConstructor.prototype.add.apply(this, [this.picture, parameters.blockPictures]);
     // parameters.blockPictures.appendChild(this.picture);
-  }
+  };
 
   this.add();
   this.picture.addEventListener('click', this.onPictureClick);

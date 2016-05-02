@@ -1,5 +1,4 @@
 'use strict';
-var parameters = require('./parameters');
 
 function DomConstructor() {
 }
