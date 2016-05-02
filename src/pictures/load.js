@@ -3,7 +3,6 @@
 var pictures;
 var settings = require('./parameters');
 var createPicturesPage = require('./create_page');
-var fillPicturesBlock = require('./fill_pictures_block');
 var enableScroll = require('./scroll');
 var filter = require('./filter');
 var gallery = require('./gallery');
@@ -20,9 +19,6 @@ xhr.onload = function() {
   settings.setParameters(pictures);
   filter(pictures);
   createPicturesPage(settings.sortedPictures);
-  // Если при загрузке первой партии картинок, конец блока виден,
-  // подгружаем еще картинки
-  fillPicturesBlock(settings.sortedPictures);
   settings.blockFilters.classList.remove('hidden');
   enableScroll();
 

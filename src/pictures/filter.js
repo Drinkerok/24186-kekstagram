@@ -38,6 +38,8 @@ settings.blockFilters.addEventListener('click', function(e) {
   settings.pictures_settings.page = 0;
   // выводим картинки
   createPicturesPage(settings.sortedPictures);
+
+  return false;
 });
 
 
