@@ -1,5 +1,5 @@
 'use strict';
-
+//dfghj
 var parameters = require('./parameters');
 
 function loadImage(imageToShow, imageHtml) {
